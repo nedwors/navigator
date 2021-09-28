@@ -19,6 +19,8 @@ class Item extends Fluent
     use Macroable;
 
     public string $url = '#0';
+
+    /** @var array<int, bool> */
     protected array $conditions = [];
 
     public function called(string $name): self
