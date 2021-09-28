@@ -13,7 +13,7 @@
 
 use Nedwors\LaravelMenu\Tests\TestCase;
 
-uses(TestCase::class);
+uses(TestCase::class)->in('Unit');
 
 /*
 |--------------------------------------------------------------------------

@@ -9,7 +9,7 @@ class LaravelMenuServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
         /*
          * Optional methods to load your package assets
@@ -21,7 +21,7 @@ class LaravelMenuServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('laravel-menu.php'),
+                __DIR__ . '/../config/config.php' => config_path('laravel-menu.php'),
             ], 'config');
 
             // Publishing the views.
@@ -50,11 +50,11 @@ class LaravelMenuServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-menu');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'laravel-menu');
 
         // Register the main class to use with the facade
         $this->app->singleton('laravel-menu', function () {
-            return new LaravelMenu;
+            return new LaravelMenu();
         });
     }
 }
