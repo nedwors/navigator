@@ -29,6 +29,24 @@ it("can define and retrieve its menu items", function () {
         );
 });
 
+it("can define multiple menus", function () {
+    Menu::define(fn () => [
+        Menu::item('Dashboard'),
+    ], 'app');
+
+    Menu::define(fn () => [
+        Menu::item('Manage'),
+    ], 'admin');
+
+    expect(Menu::items('app'))
+        ->toHaveCount(1)
+        ->first()->name->toBe('Dashboard');
+
+    expect(Menu::items('admin'))
+        ->toHaveCount(1)
+        ->first()->name->toBe('Manage');
+});
+
 it("filters out unavailable items by default", function () {
     Menu::define(fn () => [
         Menu::item('Dashboard')->when(true),
@@ -61,6 +79,51 @@ it("can have its filter defined", function () {
             fn ($item) => $item->name->toBe('Dashboard'),
             fn ($item) => $item->name->toBe('Settings'),
         );
+});
+
+it("can filter multiple menus", function () {
+    Menu::define(fn () => [
+        Menu::item('Dashboard'),
+        Menu::item('Home')
+    ], 'app');
+
+    Menu::define(fn () => [
+        Menu::item('Settings'),
+        Menu::item('Manage'),
+    ], 'admin');
+
+    Menu::filter(fn (Item $item) => $item->name == 'Home', 'app');
+    Menu::filter(fn (Item $item) => $item->name == 'Manage', 'admin');
+
+    expect(Menu::items('app'))
+        ->toHaveCount(1)
+        ->first()->name->toBe('Home');
+
+    expect(Menu::items('admin'))
+        ->toHaveCount(1)
+        ->first()->name->toBe('Manage');
+});
+
+it("will use the same filter for all menus if the menu is not defined", function () {
+    Menu::define(fn () => [
+        Menu::item('Dashboard'),
+        Menu::item('Home')
+    ], 'app');
+
+    Menu::define(fn () => [
+        Menu::item('Settings'),
+        Menu::item('Manage'),
+    ], 'admin');
+
+    Menu::filter(fn (Item $item) => $item->name == 'Home' || $item->name == 'Manage');
+
+    expect(Menu::items('app'))
+        ->toHaveCount(1)
+        ->first()->name->toBe('Home');
+
+    expect(Menu::items('admin'))
+        ->toHaveCount(1)
+        ->first()->name->toBe('Manage');
 });
 
 it("receives the application to the closure for its items definition", function () {

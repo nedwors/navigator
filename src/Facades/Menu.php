@@ -9,8 +9,9 @@ use Nedwors\LaravelMenu\Item;
 
 /**
  * @method static Item item(string $name)
- * @method static Collection<Item> items()
- * @method static self define(Closure $items)
+ * @method static Collection<Item> items(?string $menu = null)
+ * @method static self define(Closure $items, ?string $menu = null)
+ * @method static self filter(Closure $filter, ?string $menu = null)
  */
 class Menu extends Facade
 {
