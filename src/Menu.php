@@ -10,13 +10,13 @@ class Menu
 {
     use Macroable;
 
-    protected const DEFAULT_MENU = 'app';
-    protected const DEFAULT_FILTER = 'default-filter';
+    public const DEFAULT_MENU = 'app';
+    public const DEFAULT_FILTER = 'default-filter';
 
     /** @var array<string, Closure(): array<int, Item>> */
-    protected array $menus = [];
+    protected array $items = [];
 
-    /** @var array<string, ?Closure(Item)> */
+    /** @var array<string, Closure(Item): Collection<Item>> */
     protected array $filters = [];
 
     public function item(string $name): Item
@@ -25,14 +25,14 @@ class Menu
     }
 
     /** @param Closure(): array<int, Item> $items */
-    public function define(Closure $items, ?string $menu = self::DEFAULT_MENU): self
+    public function define(Closure $items, string $menu = self::DEFAULT_MENU): self
     {
         $this->items[$menu] = $items;
 
         return $this;
     }
 
-    public function items(?string $menu = self::DEFAULT_MENU): Collection
+    public function items(string $menu = self::DEFAULT_MENU): Collection
     {
         return Collection::wrap(value($this->items[$menu], app(), auth()->user()))
             ->pipe($this->applyFilter($menu));
