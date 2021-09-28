@@ -4,16 +4,22 @@ namespace Nedwors\LaravelMenu;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Fluent;
+use Illuminate\Support\Traits\Macroable;
 
 /**
- * @property-read bool $active
+ * @property      string  $name
+ * @property      string  $url
+ * @property      ?string $heroicon
+ * @property      ?string $icon
+ * @property-read bool    $active
  */
-class Item
+class Item extends Fluent
 {
-    public string $name;
+    use Macroable;
+
     public string $url = '#0';
-    public string $icon;
-    public string $heroicon;
+    protected array $conditions = [];
 
     public function called(string $name): self
     {
@@ -48,9 +54,30 @@ class Item
         return URL::current() == URL::to($this->url);
     }
 
+    public function when(?bool $condition): self
+    {
+        $this->conditions[] = (bool) $condition;
+
+        return $this;
+    }
+
+    public function unless(?bool $condition): self
+    {
+        return $this->when(!(bool) $condition);
+    }
+
+    public function available(): bool
+    {
+        return collect($this->conditions)->every(fn ($condition) => $condition === true);
+    }
+
     /** @param mixed $name */
     public function __get($name): mixed
     {
-        return $this->$name();
+        return match (true) {
+            $name === 'active' => $this->active(),
+            $name === 'available' => $this->available(),
+            default => parent::__get($name)
+        };
     }
 }

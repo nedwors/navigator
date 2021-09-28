@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Nedwors\LaravelMenu\Item;
+use Illuminate\Support\Traits\Macroable;
 
 it("can be instantiated", function () {
     $item = (new Item())
@@ -39,7 +40,7 @@ it("will resolve the route for the given named route if it exists", function () 
 
 it("can determine if the current item is active", function () {
     $this->withoutExceptionHandling();
-    
+
     $foo = (new Item())->for('foo');
     $nope = (new Item())->for('#0');
 
@@ -50,3 +51,26 @@ it("can determine if the current item is active", function () {
 
     $this->get(route('foo'));
 });
+
+it("is macroable", function () {
+    $item = new Item();
+
+    expect(class_uses($item))->toContain(Macroable::class);
+});
+
+it("has composable methods for availability", function (Item $item, bool $available) {
+    expect($item->available())->toBe($available);
+    expect($item->available)->toBe($available);
+})->with([
+    [fn () => (new Item())->when(true), true],
+    [fn () => (new Item())->when(false), false],
+    [fn () => (new Item())->when(true)->when(true), true],
+    [fn () => (new Item())->when(false)->when(true), false],
+    [fn () => (new Item())->unless(false), true],
+    [fn () => (new Item())->unless(true), false],
+    [fn () => (new Item())->unless(false)->unless(false), true],
+    [fn () => (new Item())->unless(true)->unless(false), false],
+    [fn () => (new Item())->when(true)->unless(false), true],
+    [fn () => (new Item())->when(true)->unless(true), false],
+    [fn () => (new Item())->when(false)->unless(false), false],
+]);
