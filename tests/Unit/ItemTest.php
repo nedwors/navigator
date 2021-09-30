@@ -85,6 +85,28 @@ it("can determine if any of its decendants are active", function () {
     $this->withoutExceptionHandling();
 
     $nope = (new Item())->for('#0')->subMenu(
+        $bar = (new Item())->for('bar'),
+        $foo = (new Item())->for('foo'),
+    );
+
+    Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$bar, &$foo, &$whizz) {
+        expect($nope->active)->toBeFalse;
+        expect($nope->subActive)->toBeTrue;
+
+        expect($bar->active)->toBeFalse;
+        expect($bar->subActive)->toBeFalse;
+
+        expect($foo->active)->toBeTrue;
+        expect($foo->subActive)->toBeFalse;
+    }]);
+
+    $this->get(route('foo'));
+});
+
+it("can determine if any of its nested decendants are active", function () {
+    $this->withoutExceptionHandling();
+
+    $nope = (new Item())->for('#0')->subMenu(
         $nopeAgain = (new Item())->for('#1')->subMenu(
             $bar = (new Item())->for('bar')
         ),
@@ -103,9 +125,6 @@ it("can determine if any of its decendants are active", function () {
         expect($nopeAgain->active)->toBeFalse;
         expect($nopeAgain->subActive)->toBeFalse;
 
-        expect($nope->active)->toBeFalse;
-        expect($nope->subActive)->toBeTrue;
-
         expect($stillNope->active)->toBeFalse;
         expect($stillNope->subActive)->toBeTrue;
 
@@ -115,6 +134,7 @@ it("can determine if any of its decendants are active", function () {
 
     $this->get(route('foo'));
 });
+
 it("is macroable", function () {
     $item = new Item();
 

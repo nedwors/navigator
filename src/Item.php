@@ -104,12 +104,11 @@ class Item extends Fluent
     }
 
     /** @param Collection<int, self> $items */
-    protected function subItemsAreActive(Collection $items, bool $active = false): bool
+    protected function subItemsAreActive(Collection $items): bool
     {
-        if ($items->contains->active) {
-            return true;
-        }
-
-        return $items->reduce(fn (bool $carry, self $item) => $item->subItems->isEmpty() ? $carry : $this->subItemsAreActive($item->subItems, $carry), $active);
+        return $items->reduce(fn (bool $active, self $item) =>
+            $item->subItems->isEmpty() ? $active : $this->subItemsAreActive($item->subItems),
+            $items->contains->active
+        );
     }
 }
