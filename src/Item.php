@@ -9,12 +9,12 @@ use Illuminate\Support\Fluent;
 use Illuminate\Support\Traits\Macroable;
 
 /**
- * @property      string  $name
- * @property      string  $url
- * @property      ?string $heroicon
- * @property      ?string $icon
- * @property-read bool    $active
- * @property-read Collection<self>    $subItems
+ * @property      string           $name
+ * @property      string           $url
+ * @property      ?string          $heroicon
+ * @property      ?string          $icon
+ * @property-read bool             $active
+ * @property-read Collection<self> $subItems
  */
 class Item extends Fluent
 {
@@ -110,9 +110,6 @@ class Item extends Fluent
             return true;
         }
 
-        return $items->reduce(fn (bool $carry, self $item) =>
-            $item->subItems->isEmpty() ? $carry : $this->subItemsAreActive($item->subItems, $carry)
-        , $active);
+        return $items->reduce(fn (bool $carry, self $item) => $item->subItems->isEmpty() ? $carry : $this->subItemsAreActive($item->subItems, $carry), $active);
     }
-
 }
