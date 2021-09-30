@@ -51,7 +51,7 @@ class Menu
         return match (true) {
             isset($this->filters[$menu]) => fn (Collection $items) => $items->filter($this->filters[$menu]),
             isset($this->filters[self::DEFAULT_FILTER]) => fn (Collection $items) => $items->filter($this->filters[self::DEFAULT_FILTER]),
-            default => fn (Collection $items) => $items->filter->available()
+            default => fn (Collection $items) => $items->filter->available
         };
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Nedwors\LaravelMenu;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Fluent;
@@ -13,12 +14,16 @@ use Illuminate\Support\Traits\Macroable;
  * @property      ?string $heroicon
  * @property      ?string $icon
  * @property-read bool    $active
+ * @property-read Collection<self>    $subItems
  */
 class Item extends Fluent
 {
     use Macroable;
 
     public string $url = '#0';
+
+    /** @var array<int, self> */
+    protected array $subItemsArray = [];
 
     /** @var array<int, bool> */
     protected array $conditions = [];
@@ -51,9 +56,11 @@ class Item extends Fluent
         return $this;
     }
 
-    public function active(): bool
+    public function subMenu(self ...$items): self
     {
-        return URL::current() == URL::to($this->url);
+        $this->subItemsArray = $items;
+
+        return $this;
     }
 
     public function when(?bool $condition): self
@@ -68,18 +75,44 @@ class Item extends Fluent
         return $this->when(!(bool) $condition);
     }
 
-    public function available(): bool
+    /** @param mixed $name */
+    public function __get($name): mixed
+    {
+        return match ($name) {
+            'active' => $this->active(),
+            'available' => $this->available(),
+            'subItems' => $this->subItems(),
+            'subActive' => $this->subItemsAreActive($this->subItems),
+            default => parent::__get($name)
+        };
+    }
+
+    protected function active(): bool
+    {
+        return URL::current() == URL::to($this->url);
+    }
+
+    protected function available(): bool
     {
         return collect($this->conditions)->every(fn ($condition) => $condition === true);
     }
 
-    /** @param mixed $name */
-    public function __get($name): mixed
+    /** @return Collection<int, self> */
+    protected function subItems(): Collection
     {
-        return match (true) {
-            $name === 'active' => $this->active(),
-            $name === 'available' => $this->available(),
-            default => parent::__get($name)
-        };
+        return collect($this->subItemsArray);
     }
+
+    /** @param Collection<int, self> $items */
+    protected function subItemsAreActive(Collection $items, bool $active = false): bool
+    {
+        if ($items->contains->active) {
+            return true;
+        }
+
+        return $items->reduce(fn (bool $carry, self $item) =>
+            $item->subItems->isEmpty() ? $carry : $this->subItemsAreActive($item->subItems, $carry)
+        , $active);
+    }
+
 }
