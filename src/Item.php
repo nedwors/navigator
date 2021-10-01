@@ -29,7 +29,7 @@ class Item extends Fluent
     /** @var array<int, bool> */
     protected array $conditions = [];
 
-    /** @var array<int, null|Closure(self): bool> */
+    /** @var array<int, Closure(self): bool|null> */
     protected ?Closure $activeCheck = null;
 
     public function called(string $name): self
@@ -118,8 +118,7 @@ class Item extends Fluent
     /** @param Collection<int, self> $items */
     protected function subItemsAreActive(Collection $items): bool
     {
-        return $items->reduce(fn (bool $active, self $item) =>
-            $item->subItems->isEmpty() ? $active : $this->subItemsAreActive($item->subItems),
+        return $items->reduce(fn (bool $active, self $item) => $item->subItems->isEmpty() ? $active : $this->subItemsAreActive($item->subItems),
             $items->contains->active
         );
     }
