@@ -2,6 +2,7 @@
 
 namespace Nedwors\LaravelMenu;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
@@ -27,6 +28,9 @@ class Item extends Fluent
 
     /** @var array<int, bool> */
     protected array $conditions = [];
+
+    /** @var array<int, null|Closure(self): bool> */
+    protected ?Closure $activeCheck = null;
 
     public function called(string $name): self
     {
@@ -75,6 +79,14 @@ class Item extends Fluent
         return $this->when(!(bool) $condition);
     }
 
+    /** @var Closure(self): bool */
+    public function activeWhen(Closure $activeCheck): self
+    {
+        $this->activeCheck = $activeCheck;
+
+        return $this;
+    }
+
     /** @param mixed $name */
     public function __get($name): mixed
     {
@@ -89,7 +101,7 @@ class Item extends Fluent
 
     protected function active(): bool
     {
-        return URL::current() == URL::to($this->url);
+        return is_null($this->activeCheck) ? URL::current() == URL::to($this->url) : value($this->activeCheck, $this);
     }
 
     protected function available(): bool

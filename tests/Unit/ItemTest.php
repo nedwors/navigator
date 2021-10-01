@@ -55,6 +55,21 @@ it("can determine if the current item is active", function () {
     $this->get(route('foo'));
 });
 
+
+it("can have a custom callback to determine its active state", function () {
+    $this->withoutExceptionHandling();
+
+    $foo = (new Item())->for('foo')->activeWhen(fn ($item) => false);
+    $nope = (new Item())->for('#0')->activeWhen(fn ($item) => url()->current() == url()->to(route('foo')));
+
+    Route::get('/foo', ['as' => 'foo', function () use (&$foo, &$nope) {
+        expect($foo->active)->toBeFalse;
+        expect($nope->active)->toBeTrue;
+    }]);
+
+    $this->get(route('foo'));
+});
+
 it("can have a sub menu", function () {
     $item = (new Item())
         ->subMenu(

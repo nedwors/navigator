@@ -136,6 +136,59 @@ it("receives the application to the closure for its items definition", function 
     Menu::items();
 });
 
+it("can define the active check for its items", function () {
+    Menu::define(fn () => [
+        Menu::item('Settings'),
+        Menu::item('Dashboard'),
+    ]);
+
+    Menu::active(fn (Item $item) => $item->name == 'Settings');
+
+    expect(Menu::items()->firstWhere('name', 'Dashboard')->active)->toBeFalse;
+    expect(Menu::items()->firstWhere('name', 'Settings')->active)->toBeTrue;
+});
+
+it("can define an active check for multiple menus", function () {
+    Menu::define(fn () => [
+        Menu::item('Dashboard'),
+        Menu::item('Home')
+    ], 'app');
+
+    Menu::define(fn () => [
+        Menu::item('Settings'),
+        Menu::item('Manage'),
+    ], 'admin');
+
+    Menu::active(fn (Item $item) => $item->name == 'Home', 'app');
+    Menu::active(fn (Item $item) => $item->name == 'Manage', 'admin');
+
+    expect(Menu::items('app'))->toHaveCount(2);
+    expect(Menu::items('app')->filter->active)->toHaveCount(1)->first()->name->toEqual('Home');
+
+    expect(Menu::items('admin'))->toHaveCount(2);
+    expect(Menu::items('admin')->filter->active)->toHaveCount(1)->first()->name->toEqual('Manage');
+});
+
+it("will use the same active check for all menus if the menu is not defined", function () {
+    Menu::define(fn () => [
+        Menu::item('Dashboard'),
+        Menu::item('Home')
+    ], 'app');
+
+    Menu::define(fn () => [
+        Menu::item('Settings'),
+        Menu::item('Manage'),
+    ], 'admin');
+
+    Menu::active(fn (Item $item) => $item->name == 'Home' || $item->name == 'Manage');
+
+    expect(Menu::items('app'))->toHaveCount(2);
+    expect(Menu::items('app')->filter->active)->toHaveCount(1)->first()->name->toEqual('Home');
+
+    expect(Menu::items('admin'))->toHaveCount(2);
+    expect(Menu::items('admin')->filter->active)->toHaveCount(1)->first()->name->toEqual('Manage');
+});
+
 it("is macroable", function () {
     expect(class_uses(Menu::getFacadeRoot()))->toContain(Macroable::class);
 });
