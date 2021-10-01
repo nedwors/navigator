@@ -39,9 +39,9 @@ class Item extends Fluent
         return $this;
     }
 
-    public function for(string $route, mixed $parameters = []): self
+    public function for(string $route, mixed $parameters = [], bool $absolute = true): self
     {
-        $this->url = Route::has($route) ? route($route, $parameters) : $route;
+        $this->url = Route::has($route) ? route($route, $parameters, $absolute) : $route;
 
         return $this;
     }
