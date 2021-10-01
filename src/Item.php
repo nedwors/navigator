@@ -10,12 +10,13 @@ use Illuminate\Support\Fluent;
 use Illuminate\Support\Traits\Macroable;
 
 /**
- * @property      string           $name
- * @property      string           $url
- * @property      ?string          $heroicon
- * @property      ?string          $icon
- * @property-read bool             $active
- * @property-read Collection<self> $subItems
+ * @property      string           $name     The display name for the item
+ * @property      string           $url      The full url for the item
+ * @property      ?string          $heroicon The heroicon name for the item
+ * @property      ?string          $icon     The icon name/path for the item
+ * @property-read bool             $active    Determine if the current item is active
+ * @property-read bool             $subActive Determine if any of the items decendants are active
+ * @property-read Collection<self> $subItems  Define a sub menu for the item
  */
 class Item extends Fluent
 {
