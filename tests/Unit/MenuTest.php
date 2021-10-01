@@ -142,7 +142,7 @@ it("can define the active check for its items", function () {
         Menu::item('Dashboard'),
     ]);
 
-    Menu::active(fn (Item $item) => $item->name == 'Settings');
+    Menu::activeWhen(fn (Item $item) => $item->name == 'Settings');
 
     expect(Menu::items()->firstWhere('name', 'Dashboard')->active)->toBeFalse;
     expect(Menu::items()->firstWhere('name', 'Settings')->active)->toBeTrue;
@@ -159,8 +159,8 @@ it("can define an active check for multiple menus", function () {
         Menu::item('Manage'),
     ], 'admin');
 
-    Menu::active(fn (Item $item) => $item->name == 'Home', 'app');
-    Menu::active(fn (Item $item) => $item->name == 'Manage', 'admin');
+    Menu::activeWhen(fn (Item $item) => $item->name == 'Home', 'app');
+    Menu::activeWhen(fn (Item $item) => $item->name == 'Manage', 'admin');
 
     expect(Menu::items('app'))->toHaveCount(2);
     expect(Menu::items('app')->filter->active)->toHaveCount(1)->first()->name->toEqual('Home');
@@ -180,7 +180,7 @@ it("will use the same active check for all menus if the menu is not defined", fu
         Menu::item('Manage'),
     ], 'admin');
 
-    Menu::active(fn (Item $item) => $item->name == 'Home' || $item->name == 'Manage');
+    Menu::activeWhen(fn (Item $item) => $item->name == 'Home' || $item->name == 'Manage');
 
     expect(Menu::items('app'))->toHaveCount(2);
     expect(Menu::items('app')->filter->active)->toHaveCount(1)->first()->name->toEqual('Home');

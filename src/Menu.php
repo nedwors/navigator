@@ -10,9 +10,8 @@ class Menu
 {
     use Macroable;
 
+    public const DEFAULT = 'default-value-for-menu-items';
     public const DEFAULT_MENU = 'app';
-    public const DEFAULT_FILTER = 'default-filter';
-    public const DEFAULT_ACTIVE_CHECK = 'default-active-check';
 
     /** @var array<string, Closure(): array<int, Item>> */
     protected array $items = [];
@@ -44,7 +43,7 @@ class Menu
     }
 
     /** @param Closure(Item): mixed $filter */
-    public function filter(Closure $filter, string $menu = self::DEFAULT_FILTER): self
+    public function filter(Closure $filter, string $menu = self::DEFAULT): self
     {
         $this->filters[$menu] = $filter;
 
@@ -52,18 +51,18 @@ class Menu
     }
 
     /** @param Closure(Item): bool $activeCheck */
-    public function active(Closure $activeCheck, string $menu = self::DEFAULT_ACTIVE_CHECK): self
+    public function activeWhen(Closure $activeCheck, string $menu = self::DEFAULT): self
     {
         $this->activeChecks[$menu] = $activeCheck;
 
         return $this;
     }
 
-    protected function injectActiveCheck(string $menu): ?Closure
+    protected function injectActiveCheck(string $menu): Closure
     {
         return match (true) {
             isset($this->activeChecks[$menu]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
-            isset($this->activeChecks[self::DEFAULT_ACTIVE_CHECK]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT_ACTIVE_CHECK]),
+            isset($this->activeChecks[self::DEFAULT]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
             default => fn (Collection $items) => $items
         };
     }
@@ -72,7 +71,7 @@ class Menu
     {
         return match (true) {
             isset($this->filters[$menu]) => fn (Collection $items) => $items->filter($this->filters[$menu]),
-            isset($this->filters[self::DEFAULT_FILTER]) => fn (Collection $items) => $items->filter($this->filters[self::DEFAULT_FILTER]),
+            isset($this->filters[self::DEFAULT]) => fn (Collection $items) => $items->filter($this->filters[self::DEFAULT]),
             default => fn (Collection $items) => $items->filter->available
         };
     }
