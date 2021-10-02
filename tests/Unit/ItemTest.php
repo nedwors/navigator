@@ -3,7 +3,6 @@
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Nedwors\LaravelMenu\Item;
-use Illuminate\Support\Traits\Macroable;
 
 it("can be instantiated", function () {
     $item = (new Item())
@@ -148,12 +147,6 @@ it("can determine if any of its nested decendants are active", function () {
     }]);
 
     $this->get(route('foo'));
-});
-
-it("is macroable", function () {
-    $item = new Item();
-
-    expect(class_uses($item))->toContain(Macroable::class);
 });
 
 it("has composable methods for availability", function (Item $item, bool $available) {

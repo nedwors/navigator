@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Fluent;
-use Illuminate\Support\Traits\Macroable;
 
 /**
  * @property      string           $name     The display name for the item
@@ -21,8 +20,6 @@ use Illuminate\Support\Traits\Macroable;
  */
 class Item extends Fluent
 {
-    use Macroable;
-
     public string $url = '#0';
 
     /** @var array<int, self> */
