@@ -70,9 +70,9 @@ class Menu
     protected function applyFilter(string $menu): Closure
     {
         return match (true) {
-            isset($this->filters[$menu]) => fn (Collection $items) => $items->filter($this->filters[$menu]),
-            isset($this->filters[self::DEFAULT]) => fn (Collection $items) => $items->filter($this->filters[self::DEFAULT]),
-            default => fn (Collection $items) => $items->filter->available
+            isset($this->filters[$menu]) => fn (Collection $items) => $items->filter($this->filters[$menu])->each->filterUsing($this->filters[$menu]),
+            isset($this->filters[self::DEFAULT]) => fn (Collection $items) => $items->filter($this->filters[self::DEFAULT])->each->filterUsing($this->filters[self::DEFAULT]),
+            default => fn (Collection $items) => $items->filter->available->each->filterUsing(fn (Item $item) => $item->available),
         };
     }
 }

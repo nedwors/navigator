@@ -63,6 +63,30 @@ it("filters out unavailable items by default", function () {
         );
 });
 
+it("can filter sub menus", function () {
+    Menu::define(fn () => [
+        Menu::item('Foo')->subMenu(
+            Menu::item('Foo Child')->when(false)
+        ),
+        Menu::item('Bar')->subMenu(
+            Menu::item('Bar Child')->when(false),
+            Menu::item('Bar Child 2')->when(true),
+        ),
+    ]);
+
+    $items = Menu::items();
+
+    expect($items)
+        ->toHaveCount(2);
+
+    expect($items->firstWhere('name', 'Foo')->subItems)
+        ->toHaveCount(0);
+
+    expect($items->firstWhere('name', 'Bar')->subItems)
+        ->toHaveCount(1)
+        ->first()->name->toEqual('Bar Child 2');
+});
+
 it("can have its filter defined", function () {
     Menu::define(fn () => [
         Menu::item('Dashboard')->when(true),
@@ -81,10 +105,47 @@ it("can have its filter defined", function () {
         );
 });
 
+it("will use a defined filter for sub menus", function () {
+    Menu::define(fn () => [
+        Menu::item('Foo')->subMenu(
+            Menu::item('Foo')
+        ),
+        Menu::item('Bar')->subMenu(
+            Menu::item('Bar')->subMenu(
+                Menu::item('Foo'),
+                Menu::item('Whizz'),
+            )
+        ),
+    ]);
+
+    Menu::filter(fn (Item $item) => $item->name == 'Foo' || $item->name == 'Bar');
+
+    $items = Menu::items();
+
+    expect($items)
+        ->toHaveCount(2);
+
+    expect($items->firstWhere('name', 'Foo')->subItems)
+        ->toHaveCount(1);
+
+    expect($items->firstWhere('name', 'Bar')->subItems)
+        ->toHaveCount(1)
+        ->first()->name->toEqual('Bar');
+
+    expect($items->firstWhere('name', 'Bar')->subItems->firstWhere('name', 'Bar')->subItems)
+        ->toHaveCount(1)
+        ->first()->name->toEqual('Foo');
+});
+
 it("can filter multiple menus", function () {
     Menu::define(fn () => [
         Menu::item('Dashboard'),
-        Menu::item('Home')
+        Menu::item('Home')->subMenu(
+            Menu::item('Home')->subMenu(
+                Menu::item('Foo'),
+                Menu::item('Settings')
+            )
+        )
     ], 'app');
 
     Menu::define(fn () => [
@@ -92,12 +153,16 @@ it("can filter multiple menus", function () {
         Menu::item('Manage'),
     ], 'admin');
 
-    Menu::filter(fn (Item $item) => $item->name == 'Home', 'app');
+    Menu::filter(fn (Item $item) => $item->name == 'Home' || $item->name == 'Foo', 'app');
     Menu::filter(fn (Item $item) => $item->name == 'Manage', 'admin');
 
     expect(Menu::items('app'))
         ->toHaveCount(1)
         ->first()->name->toBe('Home');
+
+    expect(Menu::items('app')->first()->subItems->first()->subItems)
+        ->toHaveCount(1)
+        ->first()->name->toEqual('Foo');
 
     expect(Menu::items('admin'))
         ->toHaveCount(1)
@@ -139,13 +204,23 @@ it("receives the application to the closure for its items definition", function 
 it("can define the active check for its items", function () {
     Menu::define(fn () => [
         Menu::item('Settings'),
-        Menu::item('Dashboard'),
+        Menu::item('Dashboard')->subMenu(
+            Menu::item('Home')->subMenu(
+                Menu::item('Settings')
+            )
+        ),
     ]);
 
     Menu::activeWhen(fn (Item $item) => $item->name == 'Settings');
 
-    expect(Menu::items()->firstWhere('name', 'Dashboard')->active)->toBeFalse;
     expect(Menu::items()->firstWhere('name', 'Settings')->active)->toBeTrue;
+    expect(Menu::items()->firstWhere('name', 'Dashboard')->active)->toBeFalse;
+    expect(Menu::items()->firstWhere('name', 'Dashboard')->subActive)->toBeTrue;
+
+    $nested = Menu::items()->firstWhere('name', 'Dashboard')->subItems->first()->subItems->first();
+
+    expect($nested->name)->toEqual('Settings');
+    expect($nested->active)->toBeTrue;
 });
 
 it("can define an active check for multiple menus", function () {

@@ -33,6 +33,9 @@ class Item extends Fluent
     /** @var Closure(self): bool */
     protected ?Closure $activeCheck = null;
 
+    /** @var Closure(self): bool */
+    protected ?Closure $filter = null;
+
     public function called(string $name): self
     {
         $this->name = $name;
@@ -88,6 +91,14 @@ class Item extends Fluent
         return $this;
     }
 
+    /** @param Closure(self): bool $filter */
+    public function filterUsing(Closure $filter): self
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
     /** @param mixed $name */
     public function __get($name): mixed
     {
@@ -113,7 +124,9 @@ class Item extends Fluent
     /** @return Collection<int, self> */
     protected function subItems(): Collection
     {
-        return collect($this->subItemsArray);
+        return collect($this->subItemsArray)
+            ->when($this->filter, fn (Collection $items) => $items->filter($this->filter)->each->filterUsing($this->filter))
+            ->when($this->activeCheck, fn (Collection $items) => $items->each->activeWhen($this->activeCheck));
     }
 
     /** @param Collection<int, self> $items */
