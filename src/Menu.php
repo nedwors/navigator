@@ -19,7 +19,7 @@ class Menu
     /** @var array<string, Closure(Item): bool> */
     protected array $activeChecks = [];
 
-    /** @var array<string, Closure(Item): Collection<Item>> */
+    /** @var array<string, Closure(Item): bool> */
     protected array $filters = [];
 
     public function item(string $name): Item
