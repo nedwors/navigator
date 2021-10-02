@@ -23,7 +23,7 @@ class Item extends Fluent
     public string $url = '#0';
 
     /** @var Closure(): iterable<int, self>|iterable<int, self> */
-    protected Closure|iterable $subItemsArray = [];
+    protected Closure|iterable $decendants = [];
 
     /** @var array<int, bool> */
     protected array $conditions = [];
@@ -65,7 +65,7 @@ class Item extends Fluent
     /** @param Closure(): iterable<int, self>|iterable<int, self> $items */
     public function subMenu(Closure|iterable $items): self
     {
-        $this->subItemsArray = $items;
+        $this->decendants = $items;
 
         return $this;
     }
@@ -123,7 +123,7 @@ class Item extends Fluent
     /** @return LazyCollection<int, self> */
     protected function subItems(): LazyCollection
     {
-        return LazyCollection::make($this->subItemsArray)
+        return LazyCollection::make($this->decendants)
             ->when($this->filter, fn (LazyCollection $items) => $items->filter($this->filter)->each->filterSubMenuUsing($this->filter))
             ->when($this->activeCheck, fn (LazyCollection $items) => $items->each->activeWhen($this->activeCheck));
     }

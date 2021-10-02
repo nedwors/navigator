@@ -4,12 +4,21 @@ use Illuminate\Contracts\Foundation\Application;
 use Nedwors\LaravelMenu\Facades\Menu;
 use Nedwors\LaravelMenu\Item;
 use Illuminate\Support\Traits\Macroable;
+use Nedwors\LaravelMenu\Tests\Doubles\OtherItem;
 
 it("can return a menu item", function () {
     $item = Menu::item('Dashboard');
 
     expect($item)
         ->toBeInstanceOf(Item::class)
+        ->name->toBe('Dashboard');
+});
+
+it("can return a custom menu item", function () {
+    $item = Menu::using(OtherItem::class)->item('Dashboard');
+
+    expect($item)
+        ->toBeInstanceOf(OtherItem::class)
         ->name->toBe('Dashboard');
 });
 

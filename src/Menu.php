@@ -22,9 +22,20 @@ class Menu
     /** @var array<string, Closure(Item): bool> */
     protected array $filters = [];
 
+    /** @var class-string */
+    protected string $itemClass = Item::class;
+
+    /** @param class-string $class */
+    public function using(string $class): self
+    {
+        $this->itemClass = $class;
+
+        return $this;
+    }
+
     public function item(string $name): Item
     {
-        return (new Item())->called($name);
+        return resolve($this->itemClass)->called($name);
     }
 
     /** @param Closure(): iterable<int, Item> $items */
