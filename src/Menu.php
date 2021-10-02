@@ -10,17 +10,17 @@ class Menu
 {
     use Macroable;
 
-    public const DEFAULT = 'default-value-for-menu-items';
+    public const DEFAULT = 'default-menu-item';
     public const DEFAULT_MENU = 'app';
 
     /** @var array<string, Closure(): array<int, Item>> */
-    protected array $items = [];
-
-    /** @var array<string, Closure(Item): Collection<Item>> */
-    protected array $filters = [];
+    protected array $itemsArray = [];
 
     /** @var array<string, Closure(Item): bool> */
     protected array $activeChecks = [];
+
+    /** @var array<string, Closure(Item): Collection<Item>> */
+    protected array $filters = [];
 
     public function item(string $name): Item
     {
@@ -30,14 +30,14 @@ class Menu
     /** @param Closure(): array<int, Item> $items */
     public function define(Closure $items, string $menu = self::DEFAULT_MENU): self
     {
-        $this->items[$menu] = $items;
+        $this->itemsArray[$menu] = $items;
 
         return $this;
     }
 
     public function items(string $menu = self::DEFAULT_MENU): Collection
     {
-        return Collection::wrap(value($this->items[$menu], app(), auth()->user()))
+        return Collection::wrap(value($this->itemsArray[$menu], app(), auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
             ->pipe($this->applyFilter($menu));
     }
@@ -69,10 +69,12 @@ class Menu
 
     protected function applyFilter(string $menu): Closure
     {
-        return match (true) {
-            isset($this->filters[$menu]) => fn (Collection $items) => $items->filter($this->filters[$menu])->each->filterUsing($this->filters[$menu]),
-            isset($this->filters[self::DEFAULT]) => fn (Collection $items) => $items->filter($this->filters[self::DEFAULT])->each->filterUsing($this->filters[self::DEFAULT]),
-            default => fn (Collection $items) => $items->filter->available->each->filterUsing(fn (Item $item) => $item->available),
+        $filter = match (true) {
+            isset($this->filters[$menu]) => $this->filters[$menu],
+            isset($this->filters[self::DEFAULT]) => $this->filters[self::DEFAULT],
+            default => fn (Item $item) => $item->available,
         };
+
+        return fn (Collection $items) => $items->filter($filter)->each->filterSubMenuUsing($filter);
     }
 }

@@ -15,8 +15,9 @@ use Illuminate\Support\Traits\Macroable;
  * @property      ?string          $heroicon The heroicon name for the item
  * @property      ?string          $icon     The icon name/path for the item
  * @property-read bool             $active    Determine if the current item is active
- * @property-read bool             $subActive Determine if any of the items decendants are active
- * @property-read Collection<self> $subItems  Define a sub menu for the item
+ * @property-read bool             $available Determine if the current item passes its conditions for display
+ * @property-read Collection<self> $subItems  Retrieve the item's sub menu items
+ * @property-read bool             $subActive Determine if any of the item's decendants are active
  */
 class Item extends Fluent
 {
@@ -92,7 +93,7 @@ class Item extends Fluent
     }
 
     /** @param Closure(self): bool $filter */
-    public function filterUsing(Closure $filter): self
+    public function filterSubMenuUsing(Closure $filter): self
     {
         $this->filter = $filter;
 
@@ -118,14 +119,14 @@ class Item extends Fluent
 
     protected function available(): bool
     {
-        return collect($this->conditions)->every(fn ($condition) => $condition === true);
+        return collect($this->conditions)->every(fn (bool $condition) => $condition);
     }
 
     /** @return Collection<int, self> */
     protected function subItems(): Collection
     {
         return collect($this->subItemsArray)
-            ->when($this->filter, fn (Collection $items) => $items->filter($this->filter)->each->filterUsing($this->filter))
+            ->when($this->filter, fn (Collection $items) => $items->filter($this->filter)->each->filterSubMenuUsing($this->filter))
             ->when($this->activeCheck, fn (Collection $items) => $items->each->activeWhen($this->activeCheck));
     }
 
