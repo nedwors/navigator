@@ -10,8 +10,7 @@ class Menu
 {
     use Macroable;
 
-    public const DEFAULT = 'default-menu-item';
-    public const DEFAULT_MENU = 'app';
+    public const DEFAULT = 'menu.default';
 
     /** @var array<string, Closure(): iterable<int, Item>> */
     protected array $itemsArray = [];
@@ -39,7 +38,7 @@ class Menu
     }
 
     /** @param Closure(): iterable<int, Item> $items */
-    public function define(Closure $items, string $menu = self::DEFAULT_MENU): self
+    public function define(Closure $items, string $menu = self::DEFAULT): self
     {
         $this->itemsArray[$menu] = $items;
 
@@ -47,7 +46,7 @@ class Menu
     }
 
     /** @return LazyCollection<Item> */
-    public function items(string $menu = self::DEFAULT_MENU): LazyCollection
+    public function items(string $menu = self::DEFAULT): LazyCollection
     {
         return LazyCollection::make(value($this->itemsArray[$menu], app(), auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
