@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Facades\Route;
 use Nedwors\LaravelMenu\Item;
 
@@ -78,7 +78,7 @@ it("can have a sub menu", function () {
 
     $subItems = $item->subItems;
 
-    expect($subItems)->toHaveCount(2)->toBeInstanceOf(Collection::class);
+    expect($subItems)->toHaveCount(2)->toBeInstanceOf(LazyCollection::class);
     expect($subItems->firstWhere('name', 'Dashboard')->url)->toEqual('/dashboard');
     expect($subItems->firstWhere('name', 'Settings')->url)->toEqual('/settings');
 });

@@ -3,7 +3,7 @@
 namespace Nedwors\LaravelMenu;
 
 use Closure;
-use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Traits\Macroable;
 
 class Menu
@@ -35,9 +35,10 @@ class Menu
         return $this;
     }
 
-    public function items(string $menu = self::DEFAULT_MENU): Collection
+    /** @return LazyCollection<Item> */
+    public function items(string $menu = self::DEFAULT_MENU): LazyCollection
     {
-        return Collection::wrap(value($this->itemsArray[$menu], app(), auth()->user()))
+        return LazyCollection::wrap(value($this->itemsArray[$menu], app(), auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
             ->pipe($this->applyFilter($menu));
     }
@@ -61,9 +62,9 @@ class Menu
     protected function injectActiveCheck(string $menu): Closure
     {
         return match (true) {
-            isset($this->activeChecks[$menu]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
-            isset($this->activeChecks[self::DEFAULT]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
-            default => fn (Collection $items) => $items
+            isset($this->activeChecks[$menu]) => fn (LazyCollection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
+            isset($this->activeChecks[self::DEFAULT]) => fn (LazyCollection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
+            default => fn (LazyCollection $items) => $items
         };
     }
 
@@ -75,6 +76,6 @@ class Menu
             default => fn (Item $item) => $item->available,
         };
 
-        return fn (Collection $items) => $items->filter($filter)->each->filterSubMenuUsing($filter);
+        return fn (LazyCollection $items) => $items->filter($filter)->each->filterSubMenuUsing($filter);
     }
 }

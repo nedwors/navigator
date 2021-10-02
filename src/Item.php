@@ -3,20 +3,20 @@
 namespace Nedwors\LaravelMenu;
 
 use Closure;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Fluent;
+use Illuminate\Support\LazyCollection;
 
 /**
- * @property      string           $name     The display name for the item
- * @property      string           $url      The full url for the item
- * @property      ?string          $heroicon The heroicon name for the item
- * @property      ?string          $icon     The icon name/path for the item
- * @property-read bool             $active    Determine if the current item is active
- * @property-read bool             $available Determine if the current item passes its conditions for display
- * @property-read Collection<self> $subItems  Retrieve the item's sub menu items
- * @property-read bool             $subActive Determine if any of the item's decendants are active
+ * @property      string               $name     The display name for the item
+ * @property      string               $url      The full url for the item
+ * @property      ?string              $heroicon The heroicon name for the item
+ * @property      ?string              $icon     The icon name/path for the item
+ * @property-read bool                 $active    Determine if the current item is active
+ * @property-read bool                 $available Determine if the current item passes its conditions for display
+ * @property-read LazyCollection<self> $subItems  Retrieve the item's sub menu items
+ * @property-read bool                 $subActive Determine if any of the item's decendants are active
  */
 class Item extends Fluent
 {
@@ -119,16 +119,16 @@ class Item extends Fluent
         return collect($this->conditions)->every(fn (bool $condition) => $condition);
     }
 
-    /** @return Collection<int, self> */
-    protected function subItems(): Collection
+    /** @return LazyCollection<int, self> */
+    protected function subItems(): LazyCollection
     {
-        return collect($this->subItemsArray)
-            ->when($this->filter, fn (Collection $items) => $items->filter($this->filter)->each->filterSubMenuUsing($this->filter))
-            ->when($this->activeCheck, fn (Collection $items) => $items->each->activeWhen($this->activeCheck));
+        return LazyCollection::wrap($this->subItemsArray)
+            ->when($this->filter, fn (LazyCollection $items) => $items->filter($this->filter)->each->filterSubMenuUsing($this->filter))
+            ->when($this->activeCheck, fn (LazyCollection $items) => $items->each->activeWhen($this->activeCheck));
     }
 
-    /** @param Collection<int, self> $items */
-    protected function subItemsAreActive(Collection $items): bool
+    /** @param LazyCollection<int, self> $items */
+    protected function subItemsAreActive(LazyCollection $items): bool
     {
         return $items->reduce(fn (bool $active, self $item) => $item->subItems->isEmpty() ? $active : $this->subItemsAreActive($item->subItems),
             $items->contains->active
