@@ -13,7 +13,7 @@ class Menu
     public const DEFAULT = 'default-menu-item';
     public const DEFAULT_MENU = 'app';
 
-    /** @var array<string, Closure(): array<int, Item>> */
+    /** @var array<string, Closure(): iterable<int, Item>> */
     protected array $itemsArray = [];
 
     /** @var array<string, Closure(Item): bool> */
@@ -27,7 +27,7 @@ class Menu
         return (new Item())->called($name);
     }
 
-    /** @param Closure(): array<int, Item> $items */
+    /** @param Closure(): iterable<int, Item> $items */
     public function define(Closure $items, string $menu = self::DEFAULT_MENU): self
     {
         $this->itemsArray[$menu] = $items;
@@ -38,7 +38,7 @@ class Menu
     /** @return LazyCollection<Item> */
     public function items(string $menu = self::DEFAULT_MENU): LazyCollection
     {
-        return LazyCollection::wrap(value($this->itemsArray[$menu], app(), auth()->user()))
+        return LazyCollection::make(value($this->itemsArray[$menu], app(), auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
             ->pipe($this->applyFilter($menu));
     }

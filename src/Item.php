@@ -22,8 +22,8 @@ class Item extends Fluent
 {
     public string $url = '#0';
 
-    /** @var array<int, self> */
-    protected array $subItemsArray = [];
+    /** @var Closure(): iterable<int, self>|iterable<int, self> */
+    protected Closure|iterable $subItemsArray = [];
 
     /** @var array<int, bool> */
     protected array $conditions = [];
@@ -62,7 +62,8 @@ class Item extends Fluent
         return $this;
     }
 
-    public function subMenu(self ...$items): self
+    /** @param Closure(): iterable<int, self>|iterable<int, self> $items */
+    public function subMenu(Closure|iterable $items): self
     {
         $this->subItemsArray = $items;
 
@@ -104,7 +105,7 @@ class Item extends Fluent
             'active' => $this->active(),
             'available' => $this->available(),
             'subItems' => $this->subItems(),
-            'subActive' => $this->subItemsAreActive($this->subItems),
+            'subActive' => $this->hasActiveDecendants($this->subItems),
             default => parent::__get($name)
         };
     }
@@ -122,15 +123,15 @@ class Item extends Fluent
     /** @return LazyCollection<int, self> */
     protected function subItems(): LazyCollection
     {
-        return LazyCollection::wrap($this->subItemsArray)
+        return LazyCollection::make($this->subItemsArray)
             ->when($this->filter, fn (LazyCollection $items) => $items->filter($this->filter)->each->filterSubMenuUsing($this->filter))
             ->when($this->activeCheck, fn (LazyCollection $items) => $items->each->activeWhen($this->activeCheck));
     }
 
     /** @param LazyCollection<int, self> $items */
-    protected function subItemsAreActive(LazyCollection $items): bool
+    protected function hasActiveDecendants(LazyCollection $items): bool
     {
-        return $items->reduce(fn (bool $active, self $item) => $item->subItems->isEmpty() ? $active : $this->subItemsAreActive($item->subItems),
+        return $items->reduce(fn (bool $active, self $item) => $item->subItems->isEmpty() ? $active : $this->hasActiveDecendants($item->subItems),
             $items->contains->active
         );
     }

@@ -29,6 +29,22 @@ it("can define and retrieve its menu items", function () {
         );
 });
 
+it("can define menu items as a generator", function () {
+    Menu::define(fn () => yield from [
+        Menu::item('Dashboard'),
+        Menu::item('Contact Us'),
+        Menu::item('Home'),
+    ]);
+
+    expect(Menu::items())
+        ->toHaveCount(3)
+        ->sequence(
+            fn ($item) => $item->name->toBe('Dashboard'),
+            fn ($item) => $item->name->toBe('Contact Us'),
+            fn ($item) => $item->name->toBe('Home'),
+        );
+});
+
 it("can define multiple menus", function () {
     Menu::define(fn () => [
         Menu::item('Dashboard'),
@@ -65,13 +81,13 @@ it("filters out unavailable items by default", function () {
 
 it("can filter sub menus", function () {
     Menu::define(fn () => [
-        Menu::item('Foo')->subMenu(
+        Menu::item('Foo')->subMenu([
             Menu::item('Foo Child')->when(false)
-        ),
-        Menu::item('Bar')->subMenu(
+        ]),
+        Menu::item('Bar')->subMenu([
             Menu::item('Bar Child')->when(false),
             Menu::item('Bar Child 2')->when(true),
-        ),
+        ]),
     ]);
 
     $items = Menu::items();
@@ -107,15 +123,15 @@ it("can have its filter defined", function () {
 
 it("will use a defined filter for sub menus", function () {
     Menu::define(fn () => [
-        Menu::item('Foo')->subMenu(
+        Menu::item('Foo')->subMenu([
             Menu::item('Foo')
-        ),
-        Menu::item('Bar')->subMenu(
-            Menu::item('Bar')->subMenu(
+        ]),
+        Menu::item('Bar')->subMenu([
+            Menu::item('Bar')->subMenu([
                 Menu::item('Foo'),
                 Menu::item('Whizz'),
-            )
-        ),
+            ])
+        ]),
     ]);
 
     Menu::filter(fn (Item $item) => $item->name == 'Foo' || $item->name == 'Bar');
@@ -140,12 +156,12 @@ it("will use a defined filter for sub menus", function () {
 it("can filter multiple menus", function () {
     Menu::define(fn () => [
         Menu::item('Dashboard'),
-        Menu::item('Home')->subMenu(
-            Menu::item('Home')->subMenu(
+        Menu::item('Home')->subMenu([
+            Menu::item('Home')->subMenu([
                 Menu::item('Foo'),
                 Menu::item('Settings')
-            )
-        )
+            ])
+        ])
     ], 'app');
 
     Menu::define(fn () => [
@@ -204,11 +220,11 @@ it("receives the application to the closure for its items definition", function 
 it("can define the active check for its items", function () {
     Menu::define(fn () => [
         Menu::item('Settings'),
-        Menu::item('Dashboard')->subMenu(
-            Menu::item('Home')->subMenu(
+        Menu::item('Dashboard')->subMenu([
+            Menu::item('Home')->subMenu([
                 Menu::item('Settings')
-            )
-        ),
+            ])
+        ]),
     ]);
 
     Menu::activeWhen(fn (Item $item) => $item->name == 'Settings');

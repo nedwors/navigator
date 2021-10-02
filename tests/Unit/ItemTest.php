@@ -71,10 +71,24 @@ it("can have a custom callback to determine its active state", function () {
 
 it("can have a sub menu", function () {
     $item = (new Item())
-        ->subMenu(
+        ->subMenu([
             (new Item())->called('Dashboard')->for('/dashboard'),
             (new Item())->called('Settings')->for('/settings'),
-        );
+        ]);
+
+    $subItems = $item->subItems;
+
+    expect($subItems)->toHaveCount(2)->toBeInstanceOf(LazyCollection::class);
+    expect($subItems->firstWhere('name', 'Dashboard')->url)->toEqual('/dashboard');
+    expect($subItems->firstWhere('name', 'Settings')->url)->toEqual('/settings');
+});
+
+it("can have a sub menu as a generator", function () {
+    $item = (new Item())
+        ->subMenu(fn () => yield from [
+            (new Item())->called('Dashboard')->for('/dashboard'),
+            (new Item())->called('Settings')->for('/settings')
+        ]);
 
     $subItems = $item->subItems;
 
@@ -84,13 +98,13 @@ it("can have a sub menu", function () {
 });
 
 it("can theoretically have countably infinite sub menus...", function () {
-    $item = (new Item())->subMenu(
-        (new Item())->called('Foo')->subMenu(
-            (new Item())->called('Bar')->subMenu(
-                (new Item())->called('Whizz')
+    $item = (new Item())->subMenu([
+        (new Item())->called('Foo')->subMenu(fn () =>  yield from [
+            (new Item())->called('Bar')->subMenu(fn () =>
+                yield (new Item())->called('Whizz')
             )
-        )
-    );
+        ])
+    ]);
 
     expect($item->subItems->first()->subItems->first()->subItems->first()->name)->toEqual('Whizz');
 });
@@ -98,10 +112,10 @@ it("can theoretically have countably infinite sub menus...", function () {
 it("can determine if any of its decendants are active", function () {
     $this->withoutExceptionHandling();
 
-    $nope = (new Item())->for('#0')->subMenu(
+    $nope = (new Item())->for('#0')->subMenu([
         $bar = (new Item())->for('bar'),
         $foo = (new Item())->for('foo'),
-    );
+    ]);
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$bar, &$foo, &$whizz) {
         expect($nope->active)->toBeFalse;
@@ -120,17 +134,17 @@ it("can determine if any of its decendants are active", function () {
 it("can determine if any of its nested decendants are active", function () {
     $this->withoutExceptionHandling();
 
-    $nope = (new Item())->for('#0')->subMenu(
-        $nopeAgain = (new Item())->for('#1')->subMenu(
+    $nope = (new Item())->for('#0')->subMenu([
+        $nopeAgain = (new Item())->for('#1')->subMenu([
             $bar = (new Item())->for('bar')
-        ),
-        $stillNope = (new Item())->for('#0')->subMenu(
-            $andAgain = (new Item())->for('#2')->subMenu(
+        ]),
+        $stillNope = (new Item())->for('#0')->subMenu([
+            $andAgain = (new Item())->for('#2')->subMenu([
                 $whizz = (new Item())->for('whizz'),
                 $foo = (new Item())->for('foo')
-            )
-        )
-    );
+            ])
+        ])
+    ]);
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$nopeAgain, &$stillNope, &$foo) {
         expect($nope->active)->toBeFalse;
