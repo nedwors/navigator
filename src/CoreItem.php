@@ -36,7 +36,7 @@ abstract class CoreItem extends Fluent
 
     public function called(string $name): self
     {
-        $this->name = $name;
+        $this->name = __($name);
 
         return $this;
     }
