@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Foundation\Application;
 use Nedwors\LaravelMenu\Facades\Menu;
 use Nedwors\LaravelMenu\Item;
 use Illuminate\Support\Traits\Macroable;
@@ -214,16 +213,6 @@ it("will use the same filter for all menus if the menu is not defined", function
     expect(Menu::items('admin'))
         ->toHaveCount(1)
         ->first()->name->toBe('Manage');
-});
-
-it("receives the application to the closure for its items definition", function () {
-    Menu::define(function (Application $app) {
-        expect($app)->toBeInstanceOf(Application::class);
-
-        return [Menu::item('Dashboard')];
-    });
-
-    Menu::items();
 });
 
 it("can define the active check for its items", function () {
