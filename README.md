@@ -30,7 +30,7 @@ composer require nedwors/laravel-menu
 
 ## Usage
 
-Select a Service Provider - or perhaps make a dedicated one! - and pop the following in:
+Select a Service Provider - or perhaps make a dedicated one - and pop the following in:
 ```php
 Menu::define(fn () => [
     Menu::item('Dashboard')
@@ -69,7 +69,7 @@ It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` 
 - [Determining Active Status](#determining-active-status)
 - [Sub Menus](#sub-menus)
 `Menu`
-- [Define]
+- [Define](#define)
 
 #### `Item`
 ##### Name
@@ -137,7 +137,14 @@ Menu::item('Billing')->subMenu([
     ...
 ])
 ```
-There's no limit to the number of sub menus you can have, and sub menus themselves can have sub menus. It's probably rare that would be needed, but the power is there if needed.
+There's no limit to the number of sub menus you can have, and sub menus themselves can have sub menus. It's probably rare that would be needed, but the power is there if needed. Also,
+generators can be passed as the sub menu:
+```php
+Menu::item('Billing')->subMenu(fn () => yield from [
+    // Sub Menu items here...
+])
+```
+> To learn more, see the [`define`](#define) section.
 
 A common need with sub menus is determing if any of the sub menu's `Items` are active, perhaps to expand the drop down list of the parent `Item`. Rather than looping through each decendant and determining if it is [`active`](#determining-active-status) or not, you can call `subActive`:
 ```blade
@@ -147,6 +154,69 @@ A common need with sub menus is determing if any of the sub menu's `Items` are a
 ```
 This will return true regardless of nesting - even for grandchildren or great-great-greatgrandchildren. If one of a parent's decendants are active, even though `subActive` will return `true`, `active` will not. This only applies to the `Item` is accessed on.
 
+#### Menu
+
+Now we've seen how to make some `Items`, we need to actually make a menu! At its simplest, we can define a menu and retrieve a menu. But we also have control over advanced functions
+such as filtering. Let's start by making a menu:
+
+#### Define
+To create a menu, use the `define` method:
+
+```php
+Menu::define(fn () => [
+    // Items go here...
+]);
+```
+
+As you can see, the `define` method should be passed a closure that returns an `iterable`. Under the hood, the `Items` are held as a `LazyCollection` to aid performance. As such, a generator can be returned instead of a plain array:
+
+```php
+Menu::define(fn () => yield from [
+    // Items go here...
+]);
+```
+
+This probably won't be needed on most projects, but the power is there if needed.
+
+The closure that you pass to define receives both `auth()->user()` and `app()` for convenience - think for [`conditionals`](#conditionals):
+
+```php
+Menu::define(fn (?Authenticable $user, Application $app) => [
+    // Items go here...
+]);
+```
+
+How about multiple menus? No problem, just pass the menu name as the second argument to each menu definition:
+
+```php
+Menu::define(fn () => [
+    // Items go here...
+], 'admin');
+```
+
+#### Items
+Now we've defined the menus, we need to output them in our views! This can be acheived by:
+
+```php
+Menu::items()
+
+// or
+
+menuitems()
+```
+
+Both these return a `LazyCollection` of the menu `Items`. If you need access to a specific menu, this can be passed as an argument:
+```php
+Menu::items('admin')
+
+// or
+
+menuitems('admin')
+```
+
+#### Filter
+All those [`conditionals`](#conditionals) you set up need to do something right? Well, by default all `Items` that are not truthy because of their
+conditionals will filtered out when accessing the
 ### Testing
 
 ```bash
