@@ -2,12 +2,13 @@
 
 namespace Nedwors\LaravelMenu\Tests;
 
+use Nedwors\LaravelMenu\LaravelMenuServiceProvider;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
 abstract class TestCase extends TestbenchTestCase
 {
-    public function foo()
+    protected function getPackageProviders($app)
     {
-        dd('hey');
+        return [LaravelMenuServiceProvider::class];
     }
 }

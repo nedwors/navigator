@@ -36,7 +36,9 @@ class Item extends Fluent
 
     public function called(string $name): self
     {
-        $this->name = __($name);
+        $translated = __($name);
+
+        $this->name = is_string($translated) ? $translated : $name;
 
         return $this;
     }
