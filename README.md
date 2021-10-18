@@ -59,7 +59,7 @@ Let's dig further into the features available to you:
 ### API
 The package consists of two main features - the `Menu` and the `Items` within. We will explore the `Item` and then the `Menu`.
 
-It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` to allow for custom methods/properties on a per project basis. Also, `Menu` is macroable to again allow for custom functionality in your projects.
+It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` to allow for custom methods/properties on a per project basis. Also, `Menu` is macroable to allow for custom functionality in your projects.
 
 `Item`
 - [Name](#name)
@@ -70,6 +70,8 @@ It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` 
 - [Sub Menus](#sub-menus)
 `Menu`
 - [Define](#define)
+- [Filter](#filter)
+- [Active When](#active-when)
 
 #### `Item`
 ##### Name
@@ -79,7 +81,7 @@ Menu::item('Dashboard')
 
 $item->name // Dashboard
 ```
-The name is passed into the Laravel `__()` lang helper before outputting.
+> The name is passed into the Laravel `__()` lang helper before outputting.
 ##### URL
 The url is defined and retrieved as follows:
 ```php
@@ -92,7 +94,7 @@ The `for()` method can also be used to construct Laravel routes:
 Menu::item('Dashboard')->for('dashboard.show', $customer)
 ```
 The url is not required for an item to function. By default, all items have their url set to `#0` so you can output all hrefs without fear of any pesky `nulls`...
-> #0 is the default as html ids cannot begin with a number. So, you can have a clickable anchor without the page bouncing around everywhere!
+> #0 is the default as html ids cannot begin with a number. So, you can have a clickable anchor without the page bouncing around everywhere...
 ##### Icons
 A reference to an icon in your app can be defined and retrieved as follows:
 ```php
@@ -121,14 +123,16 @@ Menu::item('Billing')
     ->when($yetAnotherCheck)
 ```
 When your menu items are loaded, any falsey `Items` are filtered out by default.
+
+> This behaviour can be [modified if desired](#filter)
 ##### Determining Active Status
-A basic need of any item menu is to determine if it is active or not. To do so, simply access the `active` property:
+A basic need of any menu item is to determine if it is active or not. To do so, simply access the `active` property:
 ```blade
 @if ($item->active)
 ...
 @endif
 ```
-By default, an `Item` will return true if the current URL matches its URL.
+> By default, an `Item` will return true if the current URL matches its URL. You can [configure this behaviour](#active-when)
 ##### Sub Menus
 Creating a sub menu for any given item is simple - just define it as so:
 ```php
@@ -161,42 +165,33 @@ such as filtering. Let's start by making a menu:
 
 #### Define
 To create a menu, use the `define` method:
-
 ```php
 Menu::define(fn () => [
     // Items go here...
 ]);
 ```
-
 As you can see, the `define` method should be passed a closure that returns an `iterable`. Under the hood, the `Items` are held as a `LazyCollection` to aid performance. As such, a generator can be returned instead of a plain array:
-
 ```php
 Menu::define(fn () => yield from [
     // Items go here...
 ]);
 ```
-
 This probably won't be needed on most projects, but the power is there if needed.
 
 The closure that you pass to define receives both `auth()->user()` and `app()` for convenience - think for [`conditionals`](#conditionals):
-
 ```php
 Menu::define(fn (?Authenticable $user, Application $app) => [
     // Items go here...
 ]);
 ```
-
 How about multiple menus? No problem, just pass the menu name as the second argument to each menu definition:
-
 ```php
 Menu::define(fn () => [
     // Items go here...
 ], 'admin');
 ```
-
 #### Items
 Now we've defined the menus, we need to output them in our views! This can be acheived by:
-
 ```php
 Menu::items()
 
@@ -204,7 +199,6 @@ Menu::items()
 
 menuitems()
 ```
-
 Both these return a `LazyCollection` of the menu `Items`. If you need access to a specific menu, this can be passed as an argument:
 ```php
 Menu::items('admin')
@@ -213,10 +207,35 @@ Menu::items('admin')
 
 menuitems('admin')
 ```
-
 #### Filter
 All those [`conditionals`](#conditionals) you set up need to do something right? Well, by default all `Items` that are not truthy because of their
-conditionals will filtered out when accessing the
+conditionals will be filtered out. If you would like to control what should be filtered out, use the `filter` method. This method accepts a `Closure`
+with the same structure as a `Collection` filter:
+```php
+Menu::filter(fn (Item $item) => ...)
+```
+You can also define filters for multiple menus:
+```php
+Menu::filter(fn (Item $item) => ..., 'app')
+Menu::filter(fn (Item $item) => ..., 'admin')
+```
+> All `filters` are applied to all sub menus of the given menu too.
+
+You probably won't need to use this functionality, but it's there if needed.
+#### Active When
+By default, `Items` active property will be true when the current url is the `Item's` url. This applies whether you defined the `Item` using a named route
+or a url. If you would like to override what constitutes an `Item` as being active, you cna use the `activeWhen` method. This should be passed a `Closure` that
+receives an `Item`:
+```php
+Menu::activeWhen(fn (Item $item) => ...)
+```
+This may be useful for use cases outside the realms of traditional routing.
+Like [`filter'](#filter), this can be defined per menu:
+```php
+Menu::activeWhen(fn (Item $item) => ..., 'app')
+Menu::activeWhen(fn (Item $item) => ..., 'admin')
+```
+> The active check will be used for all sub menus within the menu too.
 ### Testing
 
 ```bash
@@ -243,7 +262,3 @@ If you discover any security related issues, please email nedwors@gmail.com inst
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
