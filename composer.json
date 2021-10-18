@@ -58,7 +58,7 @@
                 "Nedwors\\LaravelMenu\\LaravelMenuServiceProvider"
             ],
             "aliases": {
-                "LaravelMenu": "Nedwors\\LaravelMenu\\LaravelMenuFacade"
+                "Menu": "Nedwors\\LaravelMenu\\Facades\\Menu"
             }
         }
     }

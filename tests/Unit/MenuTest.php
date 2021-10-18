@@ -37,6 +37,16 @@ it("can define and retrieve its menu items", function () {
         );
 });
 
+it("will return an empty collection for an undefined menu", function () {
+    Menu::define(fn () => [
+        Menu::item('Dashboard'),
+        Menu::item('Contact Us'),
+        Menu::item('Home'),
+    ]);
+
+    expect(Menu::items('foo-bar'))->toBeEmpty;
+});
+
 it("can define menu items as a generator", function () {
     Menu::define(fn () => yield from [
         Menu::item('Dashboard'),

@@ -48,7 +48,7 @@ class Menu
     /** @return LazyCollection<Item> */
     public function items(string $menu = self::DEFAULT): LazyCollection
     {
-        return LazyCollection::make(value($this->itemsArray[$menu], auth()->user()))
+        return LazyCollection::make(value($this->itemsArray[$menu] ?? [], auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
             ->pipe($this->applyFilter($menu));
     }
