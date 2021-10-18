@@ -16,7 +16,7 @@ use Illuminate\Support\LazyCollection;
  * @property-read bool                 $active    Determine if the current item is active
  * @property-read bool                 $available Determine if the current item passes its conditions for display
  * @property-read LazyCollection<self> $subItems  Retrieve the item's sub menu items
- * @property-read bool                 $subActive Determine if any of the item's decendants are active
+ * @property-read bool                 $hasActiveDecendants Determine if any of the item's decendants are active
  */
 class Item extends Fluent
 {
@@ -107,7 +107,7 @@ class Item extends Fluent
             'active' => $this->active(),
             'available' => $this->available(),
             'subItems' => $this->subItems(),
-            'subActive' => $this->hasActiveDecendants($this->subItems),
+            'hasActiveDecendants' => $this->hasActiveDecendants($this->subItems),
             default => parent::__get($name)
         };
     }

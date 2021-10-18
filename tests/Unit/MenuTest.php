@@ -229,7 +229,7 @@ it("can define the active check for its items", function () {
 
     expect(Menu::items()->firstWhere('name', 'Settings')->active)->toBeTrue;
     expect(Menu::items()->firstWhere('name', 'Dashboard')->active)->toBeFalse;
-    expect(Menu::items()->firstWhere('name', 'Dashboard')->subActive)->toBeTrue;
+    expect(Menu::items()->firstWhere('name', 'Dashboard')->hasActiveDecendants)->toBeTrue;
 
     $nested = Menu::items()->firstWhere('name', 'Dashboard')->subItems->first()->subItems->first();
 

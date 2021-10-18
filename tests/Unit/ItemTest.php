@@ -132,13 +132,13 @@ it("can determine if any of its decendants are active", function () {
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$bar, &$foo, &$whizz) {
         expect($nope->active)->toBeFalse;
-        expect($nope->subActive)->toBeTrue;
+        expect($nope->hasActiveDecendants)->toBeTrue;
 
         expect($bar->active)->toBeFalse;
-        expect($bar->subActive)->toBeFalse;
+        expect($bar->hasActiveDecendants)->toBeFalse;
 
         expect($foo->active)->toBeTrue;
-        expect($foo->subActive)->toBeFalse;
+        expect($foo->hasActiveDecendants)->toBeFalse;
     }]);
 
     $this->get(route('foo'));
@@ -161,16 +161,16 @@ it("can determine if any of its nested decendants are active", function () {
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$nopeAgain, &$stillNope, &$foo) {
         expect($nope->active)->toBeFalse;
-        expect($nope->subActive)->toBeTrue;
+        expect($nope->hasActiveDecendants)->toBeTrue;
 
         expect($nopeAgain->active)->toBeFalse;
-        expect($nopeAgain->subActive)->toBeFalse;
+        expect($nopeAgain->hasActiveDecendants)->toBeFalse;
 
         expect($stillNope->active)->toBeFalse;
-        expect($stillNope->subActive)->toBeTrue;
+        expect($stillNope->hasActiveDecendants)->toBeTrue;
 
         expect($foo->active)->toBeTrue;
-        expect($foo->subActive)->toBeFalse;
+        expect($foo->hasActiveDecendants)->toBeFalse;
     }]);
 
     $this->get(route('foo'));
