@@ -1,8 +1,8 @@
 <?php
 
-namespace Nedwors\LaravelMenu\Tests\Doubles;
+namespace Nedwors\Navigator\Tests\Doubles;
 
-use Nedwors\LaravelMenu\Item;
+use Nedwors\Navigator\Item;
 
 class OtherItem extends Item
 {

@@ -1,14 +1,14 @@
 <?php
 
 use Illuminate\Support\LazyCollection;
-use Nedwors\LaravelMenu\Facades;
-use Nedwors\LaravelMenu\Menu;
-use Nedwors\LaravelMenu\Item;
+use Nedwors\Navigator\Facades;
+use Nedwors\Navigator\Nav;
+use Nedwors\Navigator\Item;
 
-if (!function_exists('menuitems')) {
+if (!function_exists('navitems')) {
     /** @return LazyCollection<Item> */
-    function menuitems(string $menu = Menu::DEFAULT): LazyCollection
+    function navitems(string $menu = Nav::DEFAULT): LazyCollection
     {
-        return Facades\Menu::items($menu);
+        return Facades\Nav::items($menu);
     }
 }

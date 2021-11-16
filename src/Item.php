@@ -1,6 +1,6 @@
 <?php
 
-namespace Nedwors\LaravelMenu;
+namespace Nedwors\Navigator;
 
 use Closure;
 use Illuminate\Support\Facades\Route;
@@ -65,7 +65,7 @@ class Item extends Fluent
     }
 
     /** @param Closure(): iterable<int, self>|iterable<int, self> $items */
-    public function subMenu(Closure|iterable $items): self
+    public function subItems(Closure|iterable $items): self
     {
         $this->decendants = $items;
 
@@ -93,7 +93,7 @@ class Item extends Fluent
     }
 
     /** @param Closure(self): bool $filter */
-    public function filterSubMenuUsing(Closure $filter): self
+    public function filterSubItemsUsing(Closure $filter): self
     {
         $this->filter = $filter;
 
@@ -106,7 +106,7 @@ class Item extends Fluent
         return match ($name) {
             'active' => $this->active(),
             'available' => $this->available(),
-            'subItems' => $this->subItems(),
+            'subItems' => $this->getSubItems(),
             'hasActiveDecendants' => $this->hasActiveDecendants($this->subItems),
             default => parent::__get($name)
         };
@@ -123,10 +123,10 @@ class Item extends Fluent
     }
 
     /** @return LazyCollection<int, self> */
-    protected function subItems(): LazyCollection
+    protected function getSubItems(): LazyCollection
     {
         return LazyCollection::make($this->decendants)
-            ->when($this->filter, fn (LazyCollection $items) => $items->filter($this->filter)->each->filterSubMenuUsing($this->filter))
+            ->when($this->filter, fn (LazyCollection $items) => $items->filter($this->filter)->each->filterSubItemsUsing($this->filter))
             ->when($this->activeCheck, fn (LazyCollection $items) => $items->each->activeWhen($this->activeCheck));
     }
 

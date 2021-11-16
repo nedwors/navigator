@@ -1,11 +1,13 @@
 {
-    "name": "nedwors/laravel-menu",
-    "description": "A Laravel package to ease defining app menus",
+    "name": "nedwors/navigator",
+    "description": "A Laravel package to ease defining navigation menus",
     "keywords": [
         "nedwors",
-        "laravel-menu"
+        "laravel",
+        "menu",
+        "navigation"
     ],
-    "homepage": "https://github.com/nedwors/laravel-menu",
+    "homepage": "https://github.com/nedwors/navigator",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -28,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Nedwors\\LaravelMenu\\": "src"
+            "Nedwors\\Navigator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Nedwors\\LaravelMenu\\Tests\\": "tests"
+            "Nedwors\\Navigator\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -55,10 +57,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Nedwors\\LaravelMenu\\LaravelMenuServiceProvider"
+                "Nedwors\\Navigator\\NavigatorServiceProvider"
             ],
             "aliases": {
-                "Menu": "Nedwors\\LaravelMenu\\Facades\\Menu"
+                "Menu": "Nedwors\\Navigator\\Facades\\Menu"
             }
         }
     }

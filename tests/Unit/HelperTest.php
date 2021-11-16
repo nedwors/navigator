@@ -1,15 +1,15 @@
 <?php
 
-use Nedwors\LaravelMenu\Facades\Menu;
+use Nedwors\Navigator\Facades\Nav;
 
-it("can define and retrieve its menu items", function () {
-    Menu::define(fn () => [
-        Menu::item('Dashboard'),
-        Menu::item('Contact Us'),
-        Menu::item('Home'),
+it("can define and retrieve its nav items", function () {
+    Nav::define(fn () => [
+        Nav::item('Dashboard'),
+        Nav::item('Contact Us'),
+        Nav::item('Home'),
     ]);
 
-    expect(menuitems())
+    expect(navitems())
         ->toHaveCount(3)
         ->sequence(
             fn ($item) => $item->name->toBe('Dashboard'),
@@ -19,13 +19,13 @@ it("can define and retrieve its menu items", function () {
 });
 
 it("can define and retrieve different menus", function () {
-    Menu::define(fn () => [
-        Menu::item('Dashboard'),
-        Menu::item('Contact Us'),
-        Menu::item('Home'),
+    Nav::define(fn () => [
+        Nav::item('Dashboard'),
+        Nav::item('Contact Us'),
+        Nav::item('Home'),
     ]);
 
-    expect(menuitems())
+    expect(navitems())
         ->toHaveCount(3)
         ->sequence(
             fn ($item) => $item->name->toBe('Dashboard'),
@@ -35,19 +35,19 @@ it("can define and retrieve different menus", function () {
 });
 
 it("can define multiple menus", function () {
-    Menu::define(fn () => [
-        Menu::item('Dashboard'),
+    Nav::define(fn () => [
+        Nav::item('Dashboard'),
     ], 'app');
 
-    Menu::define(fn () => [
-        Menu::item('Manage'),
+    Nav::define(fn () => [
+        Nav::item('Manage'),
     ], 'admin');
 
-    expect(menuitems('app'))
+    expect(navitems('app'))
         ->toHaveCount(1)
         ->first()->name->toBe('Dashboard');
 
-    expect(menuitems('admin'))
+    expect(navitems('admin'))
         ->toHaveCount(1)
         ->first()->name->toBe('Manage');
 });

@@ -1,12 +1,12 @@
 <?php
 
-namespace Nedwors\LaravelMenu;
+namespace Nedwors\Navigator;
 
 use Closure;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Traits\Macroable;
 
-class Menu
+class Nav
 {
     use Macroable;
 
@@ -86,6 +86,6 @@ class Menu
             default => fn (Item $item) => $item->available,
         };
 
-        return fn (LazyCollection $items) => $items->filter($filter)->each->filterSubMenuUsing($filter);
+        return fn (LazyCollection $items) => $items->filter($filter)->each->filterSubItemsUsing($filter);
     }
 }

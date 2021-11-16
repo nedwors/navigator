@@ -2,7 +2,7 @@
 
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Facades\Route;
-use Nedwors\LaravelMenu\Item;
+use Nedwors\Navigator\Item;
 
 it("can be instantiated", function () {
     $item = (new Item())
@@ -82,9 +82,9 @@ it("can have a custom callback to determine its active state", function () {
     $this->get(route('foo'));
 });
 
-it("can have a sub menu", function () {
+it("can have sub items", function () {
     $item = (new Item())
-        ->subMenu([
+        ->subItems([
             (new Item())->called('Dashboard')->for('/dashboard'),
             (new Item())->called('Settings')->for('/settings'),
         ]);
@@ -96,9 +96,9 @@ it("can have a sub menu", function () {
     expect($subItems->firstWhere('name', 'Settings')->url)->toEqual('/settings');
 });
 
-it("can have a sub menu as a generator", function () {
+it("can have sub items as a generator", function () {
     $item = (new Item())
-        ->subMenu(fn () => yield from [
+        ->subItems(fn () => yield from [
             (new Item())->called('Dashboard')->for('/dashboard'),
             (new Item())->called('Settings')->for('/settings')
         ]);
@@ -110,10 +110,10 @@ it("can have a sub menu as a generator", function () {
     expect($subItems->firstWhere('name', 'Settings')->url)->toEqual('/settings');
 });
 
-it("can theoretically have countably infinite sub menus...", function () {
-    $item = (new Item())->subMenu([
-        (new Item())->called('Foo')->subMenu(fn () =>  yield from [
-            (new Item())->called('Bar')->subMenu(fn () =>
+it("can theoretically have countably infinite sub items...", function () {
+    $item = (new Item())->subItems([
+        (new Item())->called('Foo')->subItems(fn () =>  yield from [
+            (new Item())->called('Bar')->subItems(fn () =>
                 yield (new Item())->called('Whizz')
             )
         ])
@@ -125,7 +125,7 @@ it("can theoretically have countably infinite sub menus...", function () {
 it("can determine if any of its decendants are active", function () {
     $this->withoutExceptionHandling();
 
-    $nope = (new Item())->for('#0')->subMenu([
+    $nope = (new Item())->for('#0')->subItems([
         $bar = (new Item())->for('bar'),
         $foo = (new Item())->for('foo'),
     ]);
@@ -147,12 +147,12 @@ it("can determine if any of its decendants are active", function () {
 it("can determine if any of its nested decendants are active", function () {
     $this->withoutExceptionHandling();
 
-    $nope = (new Item())->for('#0')->subMenu([
-        $nopeAgain = (new Item())->for('#1')->subMenu([
+    $nope = (new Item())->for('#0')->subItems([
+        $nopeAgain = (new Item())->for('#1')->subItems([
             $bar = (new Item())->for('bar')
         ]),
-        $stillNope = (new Item())->for('#0')->subMenu([
-            $andAgain = (new Item())->for('#2')->subMenu([
+        $stillNope = (new Item())->for('#0')->subItems([
+            $andAgain = (new Item())->for('#2')->subItems([
                 $whizz = (new Item())->for('whizz'),
                 $foo = (new Item())->for('foo')
             ])

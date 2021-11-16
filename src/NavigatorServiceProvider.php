@@ -1,10 +1,10 @@
 <?php
 
-namespace Nedwors\LaravelMenu;
+namespace Nedwors\Navigator;
 
 use Illuminate\Support\ServiceProvider;
 
-class LaravelMenuServiceProvider extends ServiceProvider
+class NavigatorServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
