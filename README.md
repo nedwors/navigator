@@ -150,13 +150,13 @@ Nav::item('Billing')->subItems(fn () => yield from [
 ```
 > To learn more, see the [`define`](#define) section.
 
-A common need with sub menus is determing if any of the sub items are active, perhaps to expand the drop down list of the parent `Item`. Rather than looping through each decendant and determining if it is [`active`](#determining-active-status) or not, you can call `subActive`:
+A common need with sub menus is determing if any of the sub items are active, perhaps to expand the drop down list of the parent `Item`. Rather than looping through each decendant and determining if it is [`active`](#determining-active-status) or not, you can call `hasActiveDecendants`:
 ```blade
-@if ($item->subActive)
+@if ($item->hasActiveDecendants)
 ...
 @endif
 ```
-This will return true regardless of nesting - even for grandchildren or great-great-greatgrandchildren. If one of a parent's decendants are active, even though `subActive` will return `true`, `active` will not. This only applies to the `Item` is accessed on.
+This will return true regardless of nesting - even for grandchildren or great-great-greatgrandchildren (you get the idea). If one of a parent's decendants are active, even though `hasActiveDecendants` will return `true`, `active` will not. This only applies to the `Item` is accessed on.
 
 #### Nav
 
