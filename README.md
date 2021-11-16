@@ -63,14 +63,14 @@ The package consists of two main features - each `Nav` and the `Items` within. W
 
 It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` to allow for custom methods/properties on a per project basis. Also, `Nav` is macroable to allow for custom functionality in your projects.
 
-`Item`
+##### `Item`
 - [Name](#name)
 - [URL](#url)
 - [Icons](#icons)
 - [Conditionals](#conditionals)
 - [Determining Active Status](#determining-active-status)
 - [Sub Items](#sub-items)
-`Nav`
+##### `Nav`
 - [Define](#define)
 - [Filter](#filter)
 - [Active When](#active-when)
