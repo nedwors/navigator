@@ -1,6 +1,6 @@
 # Navigator
 
-![Tests](https://github.com/nedwors/navigator/workflows/Tests/badge.svg)
+![Tests](https://github.com/nedwors/laravel-menu/actions/workflows/main.yml/badge.svg)
 
 Navigator is a package to create headless navigation menus for use in Laravel applications:
 
