@@ -1,13 +1,14 @@
 <?php
 
-namespace Nedwors\LaravelMenu\Tests;
+namespace Nedwors\Navigator\Tests;
 
+use Nedwors\Navigator\NavigatorServiceProvider;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
 abstract class TestCase extends TestbenchTestCase
 {
-    public function foo()
+    protected function getPackageProviders($app)
     {
-        dd('hey');
+        return [NavigatorServiceProvider::class];
     }
 }

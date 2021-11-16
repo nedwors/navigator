@@ -1,11 +1,13 @@
 {
-    "name": "nedwors/laravel-menu",
-    "description": "A Laravel package to ease defining app menus",
+    "name": "nedwors/navigator",
+    "description": "A Laravel package to ease defining navigation menus",
     "keywords": [
         "nedwors",
-        "laravel-menu"
+        "laravel",
+        "menu",
+        "navigation"
     ],
-    "homepage": "https://github.com/nedwors/laravel-menu",
+    "homepage": "https://github.com/nedwors/navigator",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -17,24 +19,23 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/support": "^8.0"
+        "illuminate/support": "^8.62"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.1",
         "nunomaduro/larastan": "^0.7.12",
-        "orchestra/testbench": "^6.0",
+        "orchestra/testbench": "^6.21.1",
         "pestphp/pest": "^1.20",
-        "pestphp/pest-plugin-laravel": "^1.1",
-        "spatie/laravel-package-tools": "^1.9"
+        "pestphp/pest-plugin-laravel": "^1.1"
     },
     "autoload": {
         "psr-4": {
-            "Nedwors\\LaravelMenu\\": "src"
+            "Nedwors\\Navigator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Nedwors\\LaravelMenu\\Tests\\": "tests"
+            "Nedwors\\Navigator\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -43,7 +44,7 @@
         "test:types": "./vendor/bin/phpstan analyse",
         "test:unit": "vendor/bin/pest --coverage",
         "test": [
-            "@lint",
+            "@test:lint",
             "\n\n",
             "@test:types",
             "\n\n",
@@ -56,10 +57,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Nedwors\\LaravelMenu\\LaravelMenuServiceProvider"
+                "Nedwors\\Navigator\\NavigatorServiceProvider"
             ],
             "aliases": {
-                "LaravelMenu": "Nedwors\\LaravelMenu\\LaravelMenuFacade"
+                "Menu": "Nedwors\\Navigator\\Facades\\Menu"
             }
         }
     }

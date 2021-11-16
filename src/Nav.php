@@ -1,19 +1,18 @@
 <?php
 
-namespace Nedwors\LaravelMenu;
+namespace Nedwors\Navigator;
 
 use Closure;
-use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Traits\Macroable;
 
-class Menu
+class Nav
 {
     use Macroable;
 
-    public const DEFAULT = 'default-menu-item';
-    public const DEFAULT_MENU = 'app';
+    public const DEFAULT = 'menu.default';
 
-    /** @var array<string, Closure(): array<int, Item>> */
+    /** @var array<string, Closure(): iterable<int, Item>> */
     protected array $itemsArray = [];
 
     /** @var array<string, Closure(Item): bool> */
@@ -22,22 +21,34 @@ class Menu
     /** @var array<string, Closure(Item): bool> */
     protected array $filters = [];
 
-    public function item(string $name): Item
+    /** @var class-string */
+    protected string $itemClass = Item::class;
+
+    /** @param class-string $class */
+    public function using(string $class): self
     {
-        return (new Item())->called($name);
+        $this->itemClass = $class;
+
+        return $this;
     }
 
-    /** @param Closure(): array<int, Item> $items */
-    public function define(Closure $items, string $menu = self::DEFAULT_MENU): self
+    public function item(string $name): Item
+    {
+        return resolve($this->itemClass)->called($name);
+    }
+
+    /** @param Closure(): iterable<int, Item> $items */
+    public function define(Closure $items, string $menu = self::DEFAULT): self
     {
         $this->itemsArray[$menu] = $items;
 
         return $this;
     }
 
-    public function items(string $menu = self::DEFAULT_MENU): Collection
+    /** @return LazyCollection<Item> */
+    public function items(string $menu = self::DEFAULT): LazyCollection
     {
-        return Collection::wrap(value($this->itemsArray[$menu], app(), auth()->user()))
+        return LazyCollection::make(value($this->itemsArray[$menu] ?? [], auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
             ->pipe($this->applyFilter($menu));
     }
@@ -61,9 +72,9 @@ class Menu
     protected function injectActiveCheck(string $menu): Closure
     {
         return match (true) {
-            isset($this->activeChecks[$menu]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
-            isset($this->activeChecks[self::DEFAULT]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
-            default => fn (Collection $items) => $items
+            isset($this->activeChecks[$menu]) => fn (LazyCollection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
+            isset($this->activeChecks[self::DEFAULT]) => fn (LazyCollection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
+            default => fn (LazyCollection $items) => $items
         };
     }
 
@@ -75,6 +86,6 @@ class Menu
             default => fn (Item $item) => $item->available,
         };
 
-        return fn (Collection $items) => $items->filter($filter)->each->filterSubMenuUsing($filter);
+        return fn (LazyCollection $items) => $items->filter($filter)->each->filterSubItemsUsing($filter);
     }
 }

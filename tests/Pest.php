@@ -11,7 +11,7 @@
 |
 */
 
-use Nedwors\LaravelMenu\Tests\TestCase;
+use Nedwors\Navigator\Tests\TestCase;
 
 uses(TestCase::class)->in('Unit');
 
