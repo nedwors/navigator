@@ -71,8 +71,8 @@ It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` 
 - [Determining Active Status](#determining-active-status)
 - [Sub Items](#sub-items)
 ##### `Nav`
-- [Items](#items)
 - [Define](#define)
+- [Items](#items)
 - [Filter](#filter)
 - [Active When](#active-when)
 
