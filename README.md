@@ -16,7 +16,7 @@ Nav::define(fn ($user) => [
 
 // In a view
 
-@foreach(Nav::items() as $item)
+@foreach(navitems() as $item)
     //
 @endforeach
 ```
@@ -44,13 +44,13 @@ Nav::define(fn () => [
 Et voila! You now have a menu ready to use. You can retrieve the items as follows:
 
 ```blade
-@foreach(Nav::items())
+@foreach(navitems())
     //
 @endforeach
 
 // or
 
-@foreach(navitems())
+@foreach(Nav::items())
     //
 @endforeach
 ```
@@ -71,6 +71,7 @@ It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` 
 - [Determining Active Status](#determining-active-status)
 - [Sub Items](#sub-items)
 ##### `Nav`
+- [Items](#items)
 - [Define](#define)
 - [Filter](#filter)
 - [Active When](#active-when)
@@ -209,6 +210,8 @@ Nav::items('admin')
 
 navitems('admin')
 ```
+> You will want to add an alias to your `app.php` config file to use `Nav::items()` without the full namespace
+
 #### Filter
 All those [`conditionals`](#conditionals) you set up need to do something right? Well, by default all `Items` that are not truthy because of their
 conditionals will be filtered out. If you would like to control what should be filtered out, use the `filter` method. This method accepts a `Closure`
