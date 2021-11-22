@@ -1,3 +1,5 @@
+![](https://banners.beyondco.de/Navigator.png?theme=light&packageManager=composer+require&packageName=nedwors%2Fnavigator&pattern=melt&style=style_1&description=A+headless+Laravel+navigation+menu+package&md=1&showWatermark=1&fontSize=100px&images=search-circle)
+
 # Navigator
 
 ![Tests](https://github.com/nedwors/laravel-menu/actions/workflows/main.yml/badge.svg)
