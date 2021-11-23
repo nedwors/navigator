@@ -45,6 +45,11 @@ class Nav
         return $this;
     }
 
+    public function toJson(string $menu = self::DEFAULT, mixed $options = 0): string
+    {
+        return $this->items($menu)->toJson($options);
+    }
+
     /** @return LazyCollection<Item> */
     public function items(string $menu = self::DEFAULT): LazyCollection
     {
