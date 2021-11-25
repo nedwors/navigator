@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\LazyCollection;
-use JsonSerializable;
 
 /**
  * @property      string               $name     The display name for the item
@@ -19,7 +18,7 @@ use JsonSerializable;
  * @property-read LazyCollection<self> $subItems  Retrieve the item's sub menu items
  * @property-read bool                 $hasActiveDecendants Determine if any of the item's decendants are active
  */
-class Item extends Fluent implements JsonSerializable
+class Item extends Fluent
 {
     public ?string $url = null;
 
