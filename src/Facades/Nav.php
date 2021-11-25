@@ -8,7 +8,6 @@ use Nedwors\Navigator;
 use Nedwors\Navigator\Item;
 
 /**
- * @method static self using(string $class)                                   Define which menu item class should be resolved for each item
  * @method static Item item(string $name)                                     Create a new menu item
  * @method static self define(Closure $items, ?string $menu = null)           Define a menu of items
  * @method static LazyCollection<Item> items(?string $menu = null)            Retrieve items in the given menu
