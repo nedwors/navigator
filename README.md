@@ -75,10 +75,12 @@ It's worth noting at this point that `Item` extends `Illuminate\Support\Fluent` 
 ##### `Nav`
 - [Define](#define)
 - [Items](#items)
+- [toJson](#tojson)
 - [Filter](#filter)
 - [Active When](#active-when)
 
 #### `Item`
+
 ##### Name
 A new `Item` is created using the `Nav::item()` method. This method receives the name of the `Item`:
 ```php
@@ -87,6 +89,7 @@ Nav::item('Dashboard')
 $item->name // Dashboard
 ```
 > The name is passed into the Laravel `__()` lang helper before outputting.
+
 ##### URL
 The url is defined and retrieved as follows:
 ```php
@@ -98,8 +101,8 @@ The `for()` method can also be used to construct Laravel routes:
 ```php
 Nav::item('Dashboard')->for('dashboard.show', $customer)
 ```
-The url is not required for an item to function. By default, all items have their url set to `#0` so you can output all hrefs without fear of any pesky `nulls`...
-> #0 is the default as html ids cannot begin with a number. So, you can have a clickable anchor without the page bouncing around everywhere...
+The url is not required for an item to function. By default, all items have a `null` url.
+
 ##### Icons
 A reference to an icon in your app can be defined and retrieved as follows:
 ```php
@@ -113,6 +116,7 @@ Nav::item('Dashboard')->heroicon('o-cog')
 
 $item->heroicon
 ```
+
 ##### Conditionals
 You can define conditionals to determine if the given `Item` should be displayed or not:
 ```php
@@ -130,6 +134,7 @@ Nav::item('Billing')
 When your nav items are loaded, any falsey `Items` are filtered out by default.
 
 > This behaviour can be [modified if desired](#filter)
+
 ##### Determining Active Status
 A basic need of any menu item is to determine if it is active or not. To do so, simply access the `active` property:
 ```blade
@@ -138,6 +143,7 @@ A basic need of any menu item is to determine if it is active or not. To do so, 
 @endif
 ```
 > By default, an `Item` will return true if the current URL matches its URL. You can [configure this behaviour](#active-when)
+
 ##### Sub Items
 Creating sub items for any given item is simple - just define as so:
 ```php
@@ -195,6 +201,7 @@ Nav::define(fn () => [
     // Items go here...
 ], 'admin');
 ```
+
 #### Items
 Now we've defined the menus, we need to output them in our views! This can be acheived by:
 ```php
@@ -214,6 +221,17 @@ navitems('admin')
 ```
 > You will want to add an alias to your `app.php` config file to use `Nav::items()` without the full namespace
 
+#### toJson
+Nav items can also be retrieved as their json representation:
+```php
+Nav::toJson()
+```
+
+Just like `Nav::items()`, if you need access to a specific menu, this can be passed as an argument:
+```php
+Nav::toJson('admin')
+```
+
 #### Filter
 All those [`conditionals`](#conditionals) you set up need to do something right? Well, by default all `Items` that are not truthy because of their
 conditionals will be filtered out. If you would like to control what should be filtered out, use the `filter` method. This method accepts a `Closure`
@@ -229,6 +247,7 @@ Nav::filter(fn (Item $item) => ..., 'admin')
 > All `filters` are applied to all sub items of the given menu too.
 
 You probably won't need to use this functionality, but it's there if needed.
+
 #### Active When
 By default, `Items` active property will be true when the current url is the `Item's` url. This applies whether you defined the `Item` using a named route
 or a url. If you would like to override what constitutes an `Item` as being active, you cna use the `activeWhen` method. This should be passed a `Closure` that
@@ -243,6 +262,7 @@ Nav::activeWhen(fn (Item $item) => ..., 'app')
 Nav::activeWhen(fn (Item $item) => ..., 'admin')
 ```
 > The active check will be used for all sub menus within the menu too.
+
 ### Testing
 
 ```bash
