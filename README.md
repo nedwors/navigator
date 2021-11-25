@@ -21,6 +21,10 @@ Nav::define(fn ($user) => [
 @foreach(navitems() as $item)
     //
 @endforeach
+
+// Or as json...
+
+Nav::toJson()
 ```
 > This is a headless package so you are completely free to style as you see fit.
 
