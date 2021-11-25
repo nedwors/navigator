@@ -1,7 +1,11 @@
 # Changelog
 
-All notable changes to `laravel-menu` will be documented in this file
+All notable changes to `navigator` will be documented in this file
 
-## 1.0.0 - 201X-XX-XX
+## 0.2.0 - 2021-11-25
 
-- initial release
+### Added
+- Support to retrieve Nav items as json
+
+### Changed
+- Updated default item route to `null` from `#0`
