@@ -21,7 +21,7 @@ use JsonSerializable;
  */
 class Item extends Fluent implements JsonSerializable
 {
-    public string $url = '#0';
+    public ?string $url = null;
 
     /** @var Closure(): iterable<int, self>|iterable<int, self> */
     protected Closure|iterable $decendants = [];

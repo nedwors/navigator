@@ -25,8 +25,8 @@ it("can have an icon and/or heroicon as they are just strings", function () {
         ->icon->toBe('icon.svg');
 });
 
-it("has a default route", function () {
-    expect((new Item())->url)->toBe('#0');
+it("has a default null route", function () {
+    expect((new Item())->url)->toBeNull;
 });
 
 it("will resolve the route for the given named route if it exists", function () {
