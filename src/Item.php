@@ -127,7 +127,7 @@ class Item extends Fluent implements JsonSerializable
 
     protected function active(): bool
     {
-        return is_null($this->activeCheck) ? URL::current() == URL::to($this->url) : (bool) value($this->activeCheck, $this);
+        return is_null($this->activeCheck) ? URL::current() == URL::to($this->url ?? '') : (bool) value($this->activeCheck, $this);
     }
 
     protected function available(): bool
