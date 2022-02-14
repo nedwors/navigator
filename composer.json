@@ -1,19 +1,18 @@
 {
-    "name": "nedwors/navigator",
+    "name": "kamilpiech97/navigator",
     "description": "A Laravel package to ease defining navigation menus",
     "keywords": [
-        "nedwors",
         "laravel",
         "menu",
         "navigation"
     ],
-    "homepage": "https://github.com/nedwors/navigator",
+    "homepage": "https://github.com/kamilpiech97/navigator",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
-            "name": "Sam Rowden",
-            "email": "nedwors@gmail.com",
+            "name": "Kamil Piech",
+            "email": "kamil.piech.97@gmail.com",
             "role": "Developer"
         }
     ],
