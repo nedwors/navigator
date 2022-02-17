@@ -2,6 +2,7 @@
   "name": "nedwors/navigator",
   "description": "A Laravel package to ease defining navigation menus",
   "keywords": [
+    "nedwors",
     "laravel",
     "menu",
     "navigation"
