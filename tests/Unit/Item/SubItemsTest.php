@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\LazyCollection;
+use Illuminate\Support\Collection;
 use Nedwors\Navigator\Item;
 
 it("can have sub items", function () {
@@ -13,31 +13,17 @@ it("can have sub items", function () {
 
     $subItems = $item->subItems;
 
-    expect($subItems)->toHaveCount(2)->toBeInstanceOf(LazyCollection::class);
-    expect($subItems->firstWhere('name', 'Dashboard')->url)->toEqual('/dashboard');
-    expect($subItems->firstWhere('name', 'Settings')->url)->toEqual('/settings');
-});
-
-it("can have sub items as a generator", function () {
-    $item = (new Item())
-        ->subItems(fn () => yield from [
-            (new Item())->called('Dashboard')->for('/dashboard'),
-            (new Item())->called('Settings')->for('/settings')
-        ]);
-
-    $subItems = $item->subItems;
-
-    expect($subItems)->toHaveCount(2)->toBeInstanceOf(LazyCollection::class);
+    expect($subItems)->toHaveCount(2)->toBeInstanceOf(Collection::class);
     expect($subItems->firstWhere('name', 'Dashboard')->url)->toEqual('/dashboard');
     expect($subItems->firstWhere('name', 'Settings')->url)->toEqual('/settings');
 });
 
 it("can theoretically have countably infinite sub items...", function () {
     $item = (new Item())->subItems([
-        (new Item())->called('Foo')->subItems(fn () =>  yield from [
-            (new Item())->called('Bar')->subItems(fn () =>
-                yield (new Item())->called('Whizz')
-            )
+        (new Item())->called('Foo')->subItems([
+            (new Item())->called('Bar')->subItems([
+                (new Item())->called('Whizz')
+            ])
         ])
     ]);
 

@@ -66,23 +66,6 @@ it("will return an empty json object for an undefined nav", function () {
         ->toBeEmpty;
 });
 
-it("can define nav items as a generator for json items", function () {
-    Nav::define(fn () => yield from [
-        Nav::item('Dashboard'),
-        Nav::item('Contact Us'),
-        Nav::item('Home'),
-    ]);
-
-    expect(Nav::toJson())
-        ->json()
-        ->toHaveCount(3)
-        ->sequence(
-            fn ($item) => $item->name->toBe('Dashboard'),
-            fn ($item) => $item->name->toBe('Contact Us'),
-            fn ($item) => $item->name->toBe('Home'),
-        );
-});
-
 it("can define and retreive multiple navs as json", function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),

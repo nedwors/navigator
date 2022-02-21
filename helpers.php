@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\LazyCollection;
+use Illuminate\Support\Collection;
 use Nedwors\Navigator\Facades;
 use Nedwors\Navigator\Nav;
 use Nedwors\Navigator\Item;
 
 if (!function_exists('navitems')) {
-    /** @return LazyCollection<Item> */
-    function navitems(string $menu = Nav::DEFAULT): LazyCollection
+    /** @return Collection<Item> */
+    function navitems(string $menu = Nav::DEFAULT): Collection
     {
         return Facades\Nav::items($menu);
     }
