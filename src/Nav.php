@@ -3,7 +3,7 @@
 namespace Nedwors\Navigator;
 
 use Closure;
-use Illuminate\Support\LazyCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 
 class Nav
@@ -39,10 +39,10 @@ class Nav
         return $this->items($menu)->toJson($options);
     }
 
-    /** @return LazyCollection<Item> */
-    public function items(string $menu = self::DEFAULT): LazyCollection
+    /** @return Collection<Item> */
+    public function items(string $menu = self::DEFAULT): Collection
     {
-        return LazyCollection::make(value($this->itemsArray[$menu] ?? [], auth()->user()))
+        return Collection::make(value($this->itemsArray[$menu] ?? [], auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
             ->pipe($this->applyFilter($menu));
     }
@@ -66,9 +66,9 @@ class Nav
     protected function injectActiveCheck(string $menu): Closure
     {
         return match (true) {
-            isset($this->activeChecks[$menu]) => fn (LazyCollection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
-            isset($this->activeChecks[self::DEFAULT]) => fn (LazyCollection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
-            default => fn (LazyCollection $items) => $items
+            isset($this->activeChecks[$menu]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
+            isset($this->activeChecks[self::DEFAULT]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
+            default => fn (Collection $items) => $items
         };
     }
 
@@ -80,6 +80,6 @@ class Nav
             default => fn (Item $item) => $item->available,
         };
 
-        return fn (LazyCollection $items) => $items->filter($filter)->each->filterSubItemsUsing($filter);
+        return fn (Collection $items) => $items->filter($filter)->each->filterSubItemsUsing($filter);
     }
 }

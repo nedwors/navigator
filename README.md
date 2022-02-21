@@ -156,10 +156,9 @@ Nav::item('Billing')->subItems([
     ...
 ])
 ```
-There's no limit to the number of sub menus you can have, and sub menus themselves can have sub menus. It's probably rare that would be needed, but the power is there if needed. Also,
-generators can be passed as the sub menu:
+There's no limit to the number of sub menus you can have, and sub menus themselves can have sub menus. It's probably rare that would be needed, but the power is there if needed:
 ```php
-Nav::item('Billing')->subItems(fn () => yield from [
+Nav::item('Billing')->subItems([
     // Sub Items here...
 ])
 ```
@@ -185,13 +184,7 @@ Nav::define(fn () => [
     // Items go here...
 ]);
 ```
-As you can see, the `define` method should be passed a closure that returns an `iterable`. Under the hood, the `Items` are held as a `LazyCollection` to aid performance. As such, a generator can be returned instead of a plain array:
-```php
-Nav::define(fn () => yield from [
-    // Items go here...
-]);
-```
-This probably won't be needed on most projects, but the power is there if needed.
+As you can see, the `define` method should be passed a closure that returns an `iterable`.
 
 The closure that you pass to define receives both `auth()->user()` and `app()` for convenience - think for [`conditionals`](#conditionals):
 ```php
@@ -215,7 +208,7 @@ Nav::items()
 
 navitems()
 ```
-Both these return a `LazyCollection` of the menu `Items`. If you need access to a specific menu, this can be passed as an argument:
+Both these return a `Collection` of the menu `Items`. If you need access to a specific menu, this can be passed as an argument:
 ```php
 Nav::items('admin')
 
