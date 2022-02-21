@@ -138,8 +138,8 @@ class Item extends Fluent
     protected function getSubItems(): LazyCollection
     {
         return LazyCollection::make($this->decendants)
-            ->when($this->filter, fn (LazyCollection $items) => $items->filter($this->filter)->each->filterSubItemsUsing($this->filter))
-            ->when($this->activeCheck, fn (LazyCollection $items) => $items->each->activeWhen($this->activeCheck));
+            ->unless(is_null($this->filter), fn (LazyCollection $items) => $items->filter($this->filter)->each->filterSubItemsUsing($this->filter))
+            ->unless(is_null($this->activeCheck), fn (LazyCollection $items) => $items->each->activeWhen($this->activeCheck));
     }
 
     /** @param LazyCollection<int, self> $items */
