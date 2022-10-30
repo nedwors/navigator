@@ -45,9 +45,11 @@ it("encodes the appropriate information to json", function () {
                     'url' => '/users',
                     'icon' => 'user.svg',
                     'heroicon' => 'o-user',
-                    'subItems' => []
+                    'subItems' => [],
+                    'active' => false
                 ]
-            ]
+                ],
+                'active' => false
         ]
     ];
 

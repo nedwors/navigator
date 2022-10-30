@@ -1,6 +1,12 @@
 # Changelog
 
 All notable changes to `navigator` will be documented in this file
+## 0.4.0 2022-10-30
+### Changed
+- Enhanced `toArray` and `toJson`
+
+### Added
+- Added `active` output to `toArray` and `toJson`
 
 ## 0.3.0 - 2022-02-21
 ### Added

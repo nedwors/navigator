@@ -103,12 +103,19 @@ class Item extends Fluent
     /** @return array<string, mixed> */
     public function jsonSerialize(): array
     {
+        return $this->toArray();
+    }
+
+    /** @return array<string, mixed> */
+    public function toArray(): array
+    {
         return [
             'name' => $this->name,
             'url' => $this->url,
             'icon' => $this->icon,
             'heroicon' => $this->heroicon,
             'subItems' => $this->subItems,
+            'active' => $this->active,
         ];
     }
 

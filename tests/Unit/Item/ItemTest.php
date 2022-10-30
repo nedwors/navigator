@@ -15,6 +15,38 @@ it("can be instantiated", function () {
         ->heroicon->toBe('o-cog');
 });
 
+it("can be transformed into an array", function () {
+    $item = (new Item())
+        ->called('Dashboard')
+        ->for('dashboard')
+        ->heroicon('o-cog');
+
+    expect($item->toArray())->toEqual([
+        'name' => 'Dashboard',
+        'url' => 'dashboard',
+        'icon' => null,
+        'heroicon' => 'o-cog',
+        'subItems' => collect(),
+        'active' => false
+    ]);
+});
+
+it("can be transformed into json", function () {
+    $item = (new Item())
+        ->called('Dashboard')
+        ->for('dashboard')
+        ->heroicon('o-cog');
+
+    expect($item->toJson())->toEqual(json_encode([
+        'name' => 'Dashboard',
+        'url' => 'dashboard',
+        'icon' => null,
+        'heroicon' => 'o-cog',
+        'subItems' => collect(),
+        'active' => false
+    ]));
+});
+
 it("can have an icon and/or heroicon as they are just strings", function () {
     $item = (new Item())
         ->heroicon('o-cog')
