@@ -44,6 +44,8 @@
         "test:types": "./vendor/bin/phpstan analyse",
         "test:unit": "vendor/bin/pest",
         "test": [
+            "@lint",
+            "\n\n",
             "@test:lint",
             "\n\n",
             "@test:types",

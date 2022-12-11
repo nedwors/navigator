@@ -1,6 +1,11 @@
 # Changelog
 
 All notable changes to `navigator` will be documented in this file
+
+## 0.4.1 2022-12-11
+### Changed
+- Updated types for `Nav::define`
+
 ## 0.4.0 2022-10-30
 ### Changed
 - Enhanced `toArray` and `toJson`

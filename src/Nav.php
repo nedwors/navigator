@@ -12,7 +12,7 @@ class Nav
 
     public const DEFAULT = 'menu.default';
 
-    /** @var array<string, Closure(): iterable<int, Item>> */
+    /** @var array<string, Closure(\Illuminate\Contracts\Auth\Authenticatable|null): iterable<int, Item>> */
     protected array $itemsArray = [];
 
     /** @var array<string, Closure(Item): bool> */
@@ -26,7 +26,7 @@ class Nav
         return resolve(Item::class)->called($name);
     }
 
-    /** @param Closure(): iterable<int, Item> $items */
+    /** @param Closure(\Illuminate\Contracts\Auth\Authenticatable|null $user): iterable<int, Item> $items */
     public function define(Closure $items, string $menu = self::DEFAULT): self
     {
         $this->itemsArray[$menu] = $items;
