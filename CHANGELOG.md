@@ -4,6 +4,10 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+## 0.5.0 2022-12-29
+### Added
+- Added support for `hasActiveDescendants` in `toArray` and `toJson`
+
 ### Fixed
 - Fixed spelling for descendants
 

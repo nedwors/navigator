@@ -28,6 +28,7 @@ it("can be transformed into an array", function () {
         'heroicon' => 'o-cog',
         'subItems' => collect(),
         'active' => false,
+        'hasActiveDescendants' => false
     ]);
 });
 
@@ -43,7 +44,8 @@ it("can be transformed into json", function () {
         'icon' => null,
         'heroicon' => 'o-cog',
         'subItems' => collect(),
-        'active' => false
+        'active' => false,
+        'hasActiveDescendants' => false,
     ]));
 });
 

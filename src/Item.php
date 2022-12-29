@@ -116,6 +116,7 @@ class Item extends Fluent
             'heroicon' => $this->heroicon,
             'subItems' => $this->subItems,
             'active' => $this->active,
+            'hasActiveDescendants' => $this->hasActiveDescendants,
         ];
     }
 

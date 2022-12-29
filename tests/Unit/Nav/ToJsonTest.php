@@ -46,10 +46,12 @@ it("encodes the appropriate information to json", function () {
                     'icon' => 'user.svg',
                     'heroicon' => 'o-user',
                     'subItems' => [],
-                    'active' => false
+                    'active' => false,
+                    'hasActiveDescendants' => false,
                 ]
                 ],
-                'active' => false
+                'active' => false,
+                'hasActiveDescendants' => false,
         ]
     ];
 
