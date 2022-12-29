@@ -17,7 +17,7 @@ it("can define the active check for its items", function () {
 
     expect(Nav::items()->firstWhere('name', 'Settings')->active)->toBeTrue;
     expect(Nav::items()->firstWhere('name', 'Dashboard')->active)->toBeFalse;
-    expect(Nav::items()->firstWhere('name', 'Dashboard')->hasActiveDecendants)->toBeTrue;
+    expect(Nav::items()->firstWhere('name', 'Dashboard')->hasActiveDescendants)->toBeTrue;
 
     $nested = Nav::items()->firstWhere('name', 'Dashboard')->subItems->first()->subItems->first();
 

@@ -16,14 +16,14 @@ use Illuminate\Support\Fluent;
  * @property-read bool             $active    Determine if the current item is active
  * @property-read bool             $available Determine if the current item passes its conditions for display
  * @property-read Collection<self> $subItems  Retrieve the item's sub menu items
- * @property-read bool             $hasActiveDecendants Determine if any of the item's decendants are active
+ * @property-read bool             $hasActiveDescendants Determine if any of the item's descendants are active
  */
 class Item extends Fluent
 {
     public ?string $url = null;
 
     /** @var Closure(): iterable<int, self>|iterable<int, self> */
-    protected Closure|iterable $decendants = [];
+    protected Closure|iterable $descendants = [];
 
     /** @var array<int, bool> */
     protected array $conditions = [];
@@ -67,7 +67,7 @@ class Item extends Fluent
     /** @param Closure(): iterable<int, self>|iterable<int, self> $items */
     public function subItems(Closure|iterable $items): self
     {
-        $this->decendants = $items;
+        $this->descendants = $items;
 
         return $this;
     }
@@ -126,7 +126,7 @@ class Item extends Fluent
             'active' => $this->active(),
             'available' => $this->available(),
             'subItems' => $this->getSubItems(),
-            'hasActiveDecendants' => $this->hasActiveDecendants($this->subItems),
+            'hasActiveDescendants' => $this->hasActiveDescendants($this->subItems),
             default => parent::__get($name)
         };
     }
@@ -144,15 +144,15 @@ class Item extends Fluent
     /** @return Collection<int, self> */
     protected function getSubItems(): Collection
     {
-        return Collection::make($this->decendants)
+        return Collection::make($this->descendants)
             ->unless(is_null($this->filter), fn (Collection $items) => $items->filter($this->filter)->each->filterSubItemsUsing($this->filter))
             ->unless(is_null($this->activeCheck), fn (Collection $items) => $items->each->activeWhen($this->activeCheck));
     }
 
     /** @param Collection<int, self> $items */
-    protected function hasActiveDecendants(Collection $items): bool
+    protected function hasActiveDescendants(Collection $items): bool
     {
-        return $items->reduce(fn (bool $active, self $item) => $item->subItems->isEmpty() ? $active : $this->hasActiveDecendants($item->subItems),
+        return $items->reduce(fn (bool $active, self $item) => $item->subItems->isEmpty() ? $active : $this->hasActiveDescendants($item->subItems),
             $items->contains->active
         );
     }

@@ -30,7 +30,7 @@ it("can theoretically have countably infinite sub items...", function () {
     expect($item->subItems->first()->subItems->first()->subItems->first()->name)->toEqual('Whizz');
 });
 
-it("can determine if any of its decendants are active", function () {
+it("can determine if any of its descendants are active", function () {
     $this->withoutExceptionHandling();
 
     $nope = (new Item())->for('#0')->subItems([
@@ -40,19 +40,19 @@ it("can determine if any of its decendants are active", function () {
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$bar, &$foo, &$whizz) {
         expect($nope->active)->toBeFalse;
-        expect($nope->hasActiveDecendants)->toBeTrue;
+        expect($nope->hasActiveDescendants)->toBeTrue;
 
         expect($bar->active)->toBeFalse;
-        expect($bar->hasActiveDecendants)->toBeFalse;
+        expect($bar->hasActiveDescendants)->toBeFalse;
 
         expect($foo->active)->toBeTrue;
-        expect($foo->hasActiveDecendants)->toBeFalse;
+        expect($foo->hasActiveDescendants)->toBeFalse;
     }]);
 
     $this->get(route('foo'));
 });
 
-it("can determine if any of its nested decendants are active", function () {
+it("can determine if any of its nested descendants are active", function () {
     $this->withoutExceptionHandling();
 
     $nope = (new Item())->for('#0')->subItems([
@@ -69,16 +69,16 @@ it("can determine if any of its nested decendants are active", function () {
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$nopeAgain, &$stillNope, &$foo) {
         expect($nope->active)->toBeFalse;
-        expect($nope->hasActiveDecendants)->toBeTrue;
+        expect($nope->hasActiveDescendants)->toBeTrue;
 
         expect($nopeAgain->active)->toBeFalse;
-        expect($nopeAgain->hasActiveDecendants)->toBeFalse;
+        expect($nopeAgain->hasActiveDescendants)->toBeFalse;
 
         expect($stillNope->active)->toBeFalse;
-        expect($stillNope->hasActiveDecendants)->toBeTrue;
+        expect($stillNope->hasActiveDescendants)->toBeTrue;
 
         expect($foo->active)->toBeTrue;
-        expect($foo->hasActiveDecendants)->toBeFalse;
+        expect($foo->hasActiveDescendants)->toBeFalse;
     }]);
 
     $this->get(route('foo'));

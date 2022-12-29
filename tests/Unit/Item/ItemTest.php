@@ -27,7 +27,7 @@ it("can be transformed into an array", function () {
         'icon' => null,
         'heroicon' => 'o-cog',
         'subItems' => collect(),
-        'active' => false
+        'active' => false,
     ]);
 });
 

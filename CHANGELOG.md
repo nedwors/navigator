@@ -2,6 +2,11 @@
 
 All notable changes to `navigator` will be documented in this file
 
+## Unreleased
+
+### Fixed
+- Fixed spelling for descendants
+
 ## 0.4.1 2022-12-11
 ### Changed
 - Updated types for `Nav::define`
