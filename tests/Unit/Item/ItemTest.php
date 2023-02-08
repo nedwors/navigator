@@ -76,15 +76,15 @@ it("will resolve the route for the given named route if it exists", function () 
 it("has composable methods for availability", function (Item $item, bool $available) {
     expect($item->available)->toBe($available);
 })->with([
-    [fn () => (new Item())->when(true), true],
-    [fn () => (new Item())->when(false), false],
-    [fn () => (new Item())->when(true)->when(true), true],
-    [fn () => (new Item())->when(false)->when(true), false],
-    [fn () => (new Item())->unless(false), true],
-    [fn () => (new Item())->unless(true), false],
-    [fn () => (new Item())->unless(false)->unless(false), true],
-    [fn () => (new Item())->unless(true)->unless(false), false],
-    [fn () => (new Item())->when(true)->unless(false), true],
-    [fn () => (new Item())->when(true)->unless(true), false],
-    [fn () => (new Item())->when(false)->unless(false), false],
+    fn () => [(new Item())->when(true), true],
+    fn () => [(new Item())->when(false), false],
+    fn () => [(new Item())->when(true)->when(true), true],
+    fn () => [(new Item())->when(false)->when(true), false],
+    fn () => [(new Item())->unless(false), true],
+    fn () => [(new Item())->unless(true), false],
+    fn () => [(new Item())->unless(false)->unless(false), true],
+    fn () => [(new Item())->unless(true)->unless(false), false],
+    fn () => [(new Item())->when(true)->unless(false), true],
+    fn () => [(new Item())->when(true)->unless(true), false],
+    fn () => [(new Item())->when(false)->unless(false), false],
 ]);
