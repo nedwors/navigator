@@ -4,6 +4,10 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+## 0.6.0 2023-02-08
+### Added
+- Added support for Laravel 10 and Pest v2
+
 ## 0.5.0 2022-12-29
 ### Added
 - Added support for `hasActiveDescendants` in `toArray` and `toJson`
