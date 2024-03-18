@@ -2,6 +2,7 @@
 
 namespace Nedwors\Navigator\Facades;
 
+use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Facade;
 use Nedwors\Navigator;
