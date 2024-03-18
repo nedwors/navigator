@@ -4,6 +4,13 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+## 0.7.0 2024-03-18
+### Added
+- Added support for Laravel 11, PHP 8.2, 8.3
+
+### Fixed
+- Fixed static analysis issue with Closure for Nav Facade
+
 ## 0.6.0 2023-02-08
 ### Added
 - Added support for Laravel 10 and Pest v2
