@@ -20,7 +20,8 @@ it("can be transformed into an array", function () {
     $item = (new Item())
         ->called('Dashboard')
         ->for('dashboard')
-        ->heroicon('o-cog');
+        ->heroicon('o-cog')
+        ->foo('bar');
 
     expect($item->toArray())->toEqual([
         'name' => 'Dashboard',
@@ -29,7 +30,8 @@ it("can be transformed into an array", function () {
         'heroicon' => 'o-cog',
         'subItems' => collect(),
         'active' => false,
-        'hasActiveDescendants' => false
+        'hasActiveDescendants' => false,
+        'attributes' => ['foo' => 'bar'],
     ]);
 });
 
@@ -47,6 +49,7 @@ it("can be transformed into json", function () {
         'subItems' => collect(),
         'active' => false,
         'hasActiveDescendants' => false,
+        'attributes' => [],
     ]));
 });
 

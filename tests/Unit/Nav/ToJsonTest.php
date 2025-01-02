@@ -48,10 +48,12 @@ it("encodes the appropriate information to json", function () {
                     'subItems' => [],
                     'active' => false,
                     'hasActiveDescendants' => false,
+                    'attributes' => []
                 ]
-                ],
-                'active' => false,
-                'hasActiveDescendants' => false,
+            ],
+            'active' => false,
+            'hasActiveDescendants' => false,
+            'attributes' => []
         ]
     ];
 

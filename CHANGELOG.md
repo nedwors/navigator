@@ -4,6 +4,10 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+## 0.8.0 2025-01-02
+### Added
+- Added `attributes` in `toArray`
+
 ## 0.7.0 2024-03-18
 ### Added
 - Added support for Laravel 11, PHP 8.2, 8.3

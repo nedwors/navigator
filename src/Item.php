@@ -3,19 +3,20 @@
 namespace Nedwors\Navigator;
 
 use Closure;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Fluent;
 
 /**
- * @property      string           $name     The display name for the item
- * @property      string           $url      The full url for the item
- * @property      ?string          $heroicon The heroicon name for the item
- * @property      ?string          $icon     The icon name/path for the item
- * @property-read bool             $active    Determine if the current item is active
- * @property-read bool             $available Determine if the current item passes its conditions for display
- * @property-read Collection<self> $subItems  Retrieve the item's sub menu items
+ * @property      string           $name                 The display name for the item
+ * @property      string           $url                  The full url for the item
+ * @property      ?string          $heroicon             The heroicon name for the item
+ * @property      ?string          $icon                 The icon name/path for the item
+ * @property-read bool             $active               Determine if the current item is active
+ * @property-read bool             $available            Determine if the current item passes its conditions for display
+ * @property-read Collection<self> $subItems             Retrieve the item's sub menu items
  * @property-read bool             $hasActiveDescendants Determine if any of the item's descendants are active
  */
 class Item extends Fluent
@@ -109,7 +110,7 @@ class Item extends Fluent
     /** @return array<string, mixed> */
     public function toArray(): array
     {
-        return [
+        $coreAttributes = [
             'name' => $this->name,
             'url' => $this->url,
             'icon' => $this->icon,
@@ -118,9 +119,14 @@ class Item extends Fluent
             'active' => $this->active,
             'hasActiveDescendants' => $this->hasActiveDescendants,
         ];
+
+        $additionalAttributes = [
+            'attributes' => Arr::except($this->attributes, array_keys($coreAttributes)),
+        ];
+
+        return array_merge($coreAttributes, $additionalAttributes);
     }
 
-    /** @param mixed $name */
     public function __get($name): mixed
     {
         return match ($name) {
