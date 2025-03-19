@@ -4,6 +4,19 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+## [1.0.0] - 2025-03-19
+### Added
+- Added support for PHP 8.3 and 8.4
+- Added support for Laravel 12
+- Added support for Pest 3
+- Added Laravel Pint
+
+### Removed
+- Removed support for PHP 8.1 and below
+- Removed support for Laravel 10 and below
+- Removed support for Pest 2
+- Removed PHP CS Fixer
+
 ## 0.8.0 2025-01-02
 ### Added
 - Added `attributes` in `toArray`

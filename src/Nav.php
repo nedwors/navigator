@@ -10,6 +10,8 @@ class Nav
 {
     use Macroable;
 
+    public const VERSION = '1.0.0';
+
     public const DEFAULT = 'menu.default';
 
     /** @var array<string, Closure(\Illuminate\Contracts\Auth\Authenticatable|null): iterable<int, Item>> */

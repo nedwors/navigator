@@ -269,6 +269,7 @@ composer test
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [UPGRADING](UPGRADING.md) for upgrading information.
 
 ## Contributing
 
