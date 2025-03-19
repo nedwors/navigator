@@ -2,7 +2,7 @@
 
 use Nedwors\Navigator\Facades\Nav;
 
-it("can define and retrieve its nav items", function () {
+it('can define and retrieve its nav items', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
         Nav::item('Contact Us'),
@@ -18,7 +18,7 @@ it("can define and retrieve its nav items", function () {
         );
 });
 
-it("can define and retrieve different menus", function () {
+it('can define and retrieve different menus', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
         Nav::item('Contact Us'),
@@ -34,7 +34,7 @@ it("can define and retrieve different menus", function () {
         );
 });
 
-it("can define multiple menus", function () {
+it('can define multiple menus', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
     ], 'app');

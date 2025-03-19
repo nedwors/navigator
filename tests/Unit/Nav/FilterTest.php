@@ -3,7 +3,7 @@
 use Nedwors\Navigator\Facades\Nav;
 use Nedwors\Navigator\Item;
 
-it("filters out unavailable items by default", function () {
+it('filters out unavailable items by default', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard')->when(true),
         Nav::item('Contact Us')->when(false),
@@ -19,10 +19,10 @@ it("filters out unavailable items by default", function () {
         );
 });
 
-it("can filter sub navs", function () {
+it('can filter sub navs', function () {
     Nav::define(fn () => [
         Nav::item('Foo')->subItems([
-            Nav::item('Foo Child')->when(false)
+            Nav::item('Foo Child')->when(false),
         ]),
         Nav::item('Bar')->subItems([
             Nav::item('Bar Child')->when(false),
@@ -43,7 +43,7 @@ it("can filter sub navs", function () {
         ->first()->name->toEqual('Bar Child 2');
 });
 
-it("can have its filter defined", function () {
+it('can have its filter defined', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard')->when(true),
         Nav::item('Contact Us')->when(false),
@@ -61,16 +61,16 @@ it("can have its filter defined", function () {
         );
 });
 
-it("will use a defined filter for sub navs", function () {
+it('will use a defined filter for sub navs', function () {
     Nav::define(fn () => [
         Nav::item('Foo')->subItems([
-            Nav::item('Foo')
+            Nav::item('Foo'),
         ]),
         Nav::item('Bar')->subItems([
             Nav::item('Bar')->subItems([
                 Nav::item('Foo'),
                 Nav::item('Whizz'),
-            ])
+            ]),
         ]),
     ]);
 
@@ -93,15 +93,15 @@ it("will use a defined filter for sub navs", function () {
         ->first()->name->toEqual('Foo');
 });
 
-it("can filter multiple navs", function () {
+it('can filter multiple navs', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
         Nav::item('Home')->subItems([
             Nav::item('Home')->subItems([
                 Nav::item('Foo'),
-                Nav::item('Settings')
-            ])
-        ])
+                Nav::item('Settings'),
+            ]),
+        ]),
     ], 'app');
 
     Nav::define(fn () => [
@@ -125,10 +125,10 @@ it("can filter multiple navs", function () {
         ->first()->name->toBe('Manage');
 });
 
-it("will use the same filter for all navs if the nav is not defined", function () {
+it('will use the same filter for all navs if the nav is not defined', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
-        Nav::item('Home')
+        Nav::item('Home'),
     ], 'app');
 
     Nav::define(fn () => [

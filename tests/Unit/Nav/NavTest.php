@@ -1,10 +1,10 @@
 <?php
 
+use Illuminate\Support\Traits\Macroable;
 use Nedwors\Navigator\Facades\Nav;
 use Nedwors\Navigator\Item;
-use Illuminate\Support\Traits\Macroable;
 
-it("can return a nav item", function () {
+it('can return a nav item', function () {
     $item = Nav::item('Dashboard');
 
     expect($item)
@@ -12,6 +12,6 @@ it("can return a nav item", function () {
         ->name->toBe('Dashboard');
 });
 
-it("is macroable", function () {
+it('is macroable', function () {
     expect(class_uses(Nav::getFacadeRoot()))->toContain(Macroable::class);
 });

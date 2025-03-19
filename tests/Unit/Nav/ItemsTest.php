@@ -2,7 +2,7 @@
 
 use Nedwors\Navigator\Facades\Nav;
 
-it("can define and retrieve its nav items", function () {
+it('can define and retrieve its nav items', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
         Nav::item('Contact Us'),
@@ -18,7 +18,7 @@ it("can define and retrieve its nav items", function () {
         );
 });
 
-it("will return an empty collection for an undefined nav", function () {
+it('will return an empty collection for an undefined nav', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
         Nav::item('Contact Us'),
@@ -28,7 +28,7 @@ it("will return an empty collection for an undefined nav", function () {
     expect(Nav::items('foo-bar'))->toBeEmpty;
 });
 
-it("can define multiple navs", function () {
+it('can define multiple navs', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
     ], 'app');

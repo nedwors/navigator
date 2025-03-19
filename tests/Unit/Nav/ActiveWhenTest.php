@@ -3,13 +3,13 @@
 use Nedwors\Navigator\Facades\Nav;
 use Nedwors\Navigator\Item;
 
-it("can define the active check for its items", function () {
+it('can define the active check for its items', function () {
     Nav::define(fn () => [
         Nav::item('Settings'),
         Nav::item('Dashboard')->subItems([
             Nav::item('Home')->subItems([
-                Nav::item('Settings')
-            ])
+                Nav::item('Settings'),
+            ]),
         ]),
     ]);
 
@@ -25,10 +25,10 @@ it("can define the active check for its items", function () {
     expect($nested->active)->toBeTrue;
 });
 
-it("can define an active check for multiple navs", function () {
+it('can define an active check for multiple navs', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
-        Nav::item('Home')
+        Nav::item('Home'),
     ], 'app');
 
     Nav::define(fn () => [
@@ -46,10 +46,10 @@ it("can define an active check for multiple navs", function () {
     expect(Nav::items('admin')->filter->active)->toHaveCount(1)->first()->name->toEqual('Manage');
 });
 
-it("will use the same active check for all navs if the nav is not defined", function () {
+it('will use the same active check for all navs if the nav is not defined', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
-        Nav::item('Home')
+        Nav::item('Home'),
     ], 'app');
 
     Nav::define(fn () => [

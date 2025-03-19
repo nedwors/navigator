@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Route;
 use Nedwors\Navigator\Item;
 
-it("can have sub items", function () {
-    $item = (new Item())
+it('can have sub items', function () {
+    $item = (new Item)
         ->subItems([
-            (new Item())->called('Dashboard')->for('/dashboard'),
-            (new Item())->called('Settings')->for('/settings'),
+            (new Item)->called('Dashboard')->for('/dashboard'),
+            (new Item)->called('Settings')->for('/settings'),
         ]);
 
     $subItems = $item->subItems;
@@ -18,24 +18,24 @@ it("can have sub items", function () {
     expect($subItems->firstWhere('name', 'Settings')->url)->toEqual('/settings');
 });
 
-it("can theoretically have countably infinite sub items...", function () {
-    $item = (new Item())->subItems([
-        (new Item())->called('Foo')->subItems([
-            (new Item())->called('Bar')->subItems([
-                (new Item())->called('Whizz')
-            ])
-        ])
+it('can theoretically have countably infinite sub items...', function () {
+    $item = (new Item)->subItems([
+        (new Item)->called('Foo')->subItems([
+            (new Item)->called('Bar')->subItems([
+                (new Item)->called('Whizz'),
+            ]),
+        ]),
     ]);
 
     expect($item->subItems->first()->subItems->first()->subItems->first()->name)->toEqual('Whizz');
 });
 
-it("can determine if any of its descendants are active", function () {
+it('can determine if any of its descendants are active', function () {
     $this->withoutExceptionHandling();
 
-    $nope = (new Item())->for('#0')->subItems([
-        $bar = (new Item())->for('bar'),
-        $foo = (new Item())->for('foo'),
+    $nope = (new Item)->for('#0')->subItems([
+        $bar = (new Item)->for('bar'),
+        $foo = (new Item)->for('foo'),
     ]);
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$bar, &$foo, &$whizz) {
@@ -52,19 +52,19 @@ it("can determine if any of its descendants are active", function () {
     $this->get(route('foo'));
 });
 
-it("can determine if any of its nested descendants are active", function () {
+it('can determine if any of its nested descendants are active', function () {
     $this->withoutExceptionHandling();
 
-    $nope = (new Item())->for('#0')->subItems([
-        $nopeAgain = (new Item())->for('#1')->subItems([
-            $bar = (new Item())->for('bar')
+    $nope = (new Item)->for('#0')->subItems([
+        $nopeAgain = (new Item)->for('#1')->subItems([
+            $bar = (new Item)->for('bar'),
         ]),
-        $stillNope = (new Item())->for('#0')->subItems([
-            $andAgain = (new Item())->for('#2')->subItems([
-                $whizz = (new Item())->for('whizz'),
-                $foo = (new Item())->for('foo')
-            ])
-        ])
+        $stillNope = (new Item)->for('#0')->subItems([
+            $andAgain = (new Item)->for('#2')->subItems([
+                $whizz = (new Item)->for('whizz'),
+                $foo = (new Item)->for('foo'),
+            ]),
+        ]),
     ]);
 
     Route::get('/foo', ['as' => 'foo', function () use (&$nope, &$nopeAgain, &$stillNope, &$foo) {

@@ -68,7 +68,7 @@ class Nav
         return match (true) {
             isset($this->activeChecks[$menu]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[$menu]),
             isset($this->activeChecks[self::DEFAULT]) => fn (Collection $items) => $items->each->activeWhen($this->activeChecks[self::DEFAULT]),
-            default => fn (Collection $items) => $items
+            default => fn (Collection $items) => $items,
         };
     }
 

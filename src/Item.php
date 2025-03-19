@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Fluent;
 
 /**
- * @property      string           $name                 The display name for the item
- * @property      string           $url                  The full url for the item
- * @property      ?string          $heroicon             The heroicon name for the item
- * @property      ?string          $icon                 The icon name/path for the item
+ * @property string $name The display name for the item
+ * @property string $url The full url for the item
+ * @property ?string $heroicon The heroicon name for the item
+ * @property ?string $icon The icon name/path for the item
  * @property-read bool             $active               Determine if the current item is active
  * @property-read bool             $available            Determine if the current item passes its conditions for display
  * @property-read Collection<self> $subItems             Retrieve the item's sub menu items
@@ -82,7 +82,7 @@ class Item extends Fluent
 
     public function unless(?bool $condition): self
     {
-        return $this->when(!(bool) $condition);
+        return $this->when(! (bool) $condition);
     }
 
     /** @param Closure(self): bool $activeCheck */
@@ -134,7 +134,7 @@ class Item extends Fluent
             'available' => $this->available(),
             'subItems' => $this->getSubItems(),
             'hasActiveDescendants' => $this->hasActiveDescendants($this->subItems),
-            default => parent::__get($name)
+            default => parent::__get($name),
         };
     }
 

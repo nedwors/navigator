@@ -2,7 +2,7 @@
 
 use Nedwors\Navigator\Facades\Nav;
 
-it("can retrieve its nav items as json", function () {
+it('can retrieve its nav items as json', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
         Nav::item('Contact Us'),
@@ -19,7 +19,7 @@ it("can retrieve its nav items as json", function () {
         );
 });
 
-it("encodes the appropriate information to json", function () {
+it('encodes the appropriate information to json', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard')
             ->for('/foo')
@@ -29,8 +29,8 @@ it("encodes the appropriate information to json", function () {
                 Nav::item('Users')
                     ->for('/users')
                     ->icon('user.svg')
-                    ->heroicon('o-user')
-            ])
+                    ->heroicon('o-user'),
+            ]),
     ]);
 
     $array = [
@@ -48,19 +48,19 @@ it("encodes the appropriate information to json", function () {
                     'subItems' => [],
                     'active' => false,
                     'hasActiveDescendants' => false,
-                    'attributes' => []
-                ]
+                    'attributes' => [],
+                ],
             ],
             'active' => false,
             'hasActiveDescendants' => false,
-            'attributes' => []
-        ]
+            'attributes' => [],
+        ],
     ];
 
     expect(Nav::toJson())->toEqual(json_encode($array));
 });
 
-it("will return an empty json object for an undefined nav", function () {
+it('will return an empty json object for an undefined nav', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
         Nav::item('Contact Us'),
@@ -72,7 +72,7 @@ it("will return an empty json object for an undefined nav", function () {
         ->toBeEmpty;
 });
 
-it("can define and retreive multiple navs as json", function () {
+it('can define and retreive multiple navs as json', function () {
     Nav::define(fn () => [
         Nav::item('Dashboard'),
     ], 'app');
