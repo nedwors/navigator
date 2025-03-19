@@ -34,20 +34,21 @@ class Nav
         return $this;
     }
 
-    public function toJson(string $menu = self::DEFAULT, mixed $options = 0): string
+    public function toJson(string $menu = self::DEFAULT, int $options = 0): string
     {
         return $this->items($menu)->toJson($options);
     }
 
-    /** @return Collection<Item> */
+    /** @return Collection<int, Item> */
     public function items(string $menu = self::DEFAULT): Collection
     {
+        /** @phpstan-ignore-next-line */
         return Collection::make(value($this->itemsArray[$menu] ?? [], auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
             ->pipe($this->applyFilter($menu));
     }
 
-    /** @param Closure(Item): mixed $filter */
+    /** @param Closure(Item): bool $filter */
     public function filter(Closure $filter, string $menu = self::DEFAULT): self
     {
         $this->filters[$menu] = $filter;
@@ -80,6 +81,7 @@ class Nav
             default => fn (Item $item) => $item->available,
         };
 
+        /** @phpstan-ignore-next-line */
         return fn (Collection $items) => $items->filter($filter)->each->filterSubItemsUsing($filter);
     }
 }

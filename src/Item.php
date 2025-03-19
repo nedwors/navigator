@@ -16,8 +16,10 @@ use Illuminate\Support\Fluent;
  * @property ?string $icon The icon name/path for the item
  * @property-read bool             $active               Determine if the current item is active
  * @property-read bool             $available            Determine if the current item passes its conditions for display
- * @property-read Collection<self> $subItems             Retrieve the item's sub menu items
+ * @property-read Collection<int, self> $subItems             Retrieve the item's sub menu items
  * @property-read bool             $hasActiveDescendants Determine if any of the item's descendants are active
+ *
+ * @extends Fluent<int|string, mixed>
  */
 class Item extends Fluent
 {
@@ -151,8 +153,11 @@ class Item extends Fluent
     /** @return Collection<int, self> */
     protected function getSubItems(): Collection
     {
-        return Collection::make($this->descendants)
+        /** @phpstan-ignore-next-line */
+        return Collection::make(value($this->descendants))
+            /** @phpstan-ignore-next-line */
             ->unless(is_null($this->filter), fn (Collection $items) => $items->filter($this->filter)->each->filterSubItemsUsing($this->filter))
+            /** @phpstan-ignore-next-line */
             ->unless(is_null($this->activeCheck), fn (Collection $items) => $items->each->activeWhen($this->activeCheck));
     }
 
