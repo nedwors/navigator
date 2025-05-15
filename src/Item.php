@@ -153,7 +153,6 @@ class Item extends Fluent
     /** @return Collection<int, self> */
     protected function getSubItems(): Collection
     {
-        /** @phpstan-ignore-next-line */
         return Collection::make(value($this->descendants))
             /** @phpstan-ignore-next-line */
             ->unless(is_null($this->filter), fn (Collection $items) => $items->filter($this->filter)->each->filterSubItemsUsing($this->filter))

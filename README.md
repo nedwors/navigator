@@ -36,6 +36,11 @@ You can install the package via composer:
 composer require nedwors/navigator
 ```
 
+> [!CAUTION]
+> Navigator v1 only supports Laravel <=12.9.2 as 12.10.0 introduced a breaking change.
+>
+> `Conditionable` was added to `Fluent` which conflicted with the existing `when` and `unless` methods of `Item`
+
 ## Usage
 
 Select a Service Provider - or perhaps make a dedicated one - and pop the following in:

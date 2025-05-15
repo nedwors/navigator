@@ -4,6 +4,10 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+## [1.0.1] - 2025-05-15
+### Fixed
+- Constrained Laravel to <=12.9.2 to avoid breaking changes in 12.10.0
+
 ## [1.0.0] - 2025-03-19
 ### Added
 - Added support for PHP 8.3 and 8.4
