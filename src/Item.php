@@ -75,16 +75,16 @@ class Item extends Fluent
         return $this;
     }
 
-    public function when(?bool $condition): self
+    public function includeWhen(?bool $condition): self
     {
         $this->conditions[] = (bool) $condition;
 
         return $this;
     }
 
-    public function unless(?bool $condition): self
+    public function includeUnless(?bool $condition): self
     {
-        return $this->when(! (bool) $condition);
+        return $this->includeWhen(! (bool) $condition);
     }
 
     /** @param Closure(self): bool $activeCheck */

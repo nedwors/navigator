@@ -13,7 +13,7 @@ Nav::define(fn ($user) => [
     Nav::item('Dashboard')
         ->for('dashboard')
         ->icon('dashboard.svg')
-        ->when($user->can('access.dashboard'))
+        ->includeWhen($user->can('access.dashboard'))
 ])
 
 // In a view
@@ -35,11 +35,6 @@ You can install the package via composer:
 ```bash
 composer require nedwors/navigator
 ```
-
-> [!CAUTION]
-> Navigator v1 only supports Laravel <=12.9.2 as 12.10.0 introduced a breaking change.
->
-> `Conditionable` was added to `Fluent` which conflicted with the existing `when` and `unless` methods of `Item`
 
 ## Usage
 
@@ -127,18 +122,21 @@ $item->heroicon
 ```
 
 ##### Conditionals
-You can define conditionals to determine if the given `Item` should be displayed or not:
-```php
-Nav::item('Billing')->when(auth()->user()->is_subscribed)
+> [!NOTE]
+Version `1.0` and below of Navigator used the methods `when` and `unless`. Now that Laravel includes these methods using the `Conditionable` trait on `Fluent`, and to generally unify with Laravel conventions, these methods have been changed in Navigator `2.0` and above to `includeWhen` and `includeUnless`
 
-Nav::item('Registration')->unless(auth()->user()->is_subscribed)
+You can define conditionals to determine if the given `Item` should be included or not in the menu:
+```php
+Nav::item('Billing')->includeWhen(auth()->user()->is_subscribed)
+
+Nav::item('Registration')->includeUnless(auth()->user()->is_subscribed)
 ```
 They can also be composed:
 ```php
 Nav::item('Billing')
-    ->when($aCheck)
-    ->unless($someOtherCheck)
-    ->when($yetAnotherCheck)
+    ->includeWhen($aCheck)
+    ->includeUnless($someOtherCheck)
+    ->includeWhen($yetAnotherCheck)
 ```
 When your nav items are loaded, any falsey `Items` are filtered out by default.
 
