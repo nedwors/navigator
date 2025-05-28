@@ -4,6 +4,11 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+## [2.0.0] - 2025-05-28
+### Changed
+- Changed the `when` and `unless` methods to `includeWhen` and `includeUnless` to respect Laravel's `Conditionable` trait conventions.
+- Changed the Laravel version to `^12.0` to support any Laravel 12 version.
+
 ## [1.0.1] - 2025-05-15
 ### Fixed
 - Constrained Laravel to <=12.9.2 to avoid breaking changes in 12.10.0
