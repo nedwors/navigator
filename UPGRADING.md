@@ -1,5 +1,21 @@
 # Upgrade Guide
 
+## Unreleased
+
+### `when` and `unless` methods
+The `when` and `unless` methods have been renamed to `includeWhen` and `includeUnless` respectively.
+
+Update your application accordingly:
+```diff
+Nav::item('Home')
+-   ->when($someCondition)
++   ->includeWhen($someCondition)
+...
+Nav::item('Dashboard')
+-   ->unless($someCondition)
++   ->includeUnless($someCondition)
+```
+
 ## 1.0.0
 Navigator no longer supports the following:
 - Laravel 10 and below

@@ -82,16 +82,16 @@ if (version_compare(version(), '2') > -1) {
     it('has composable methods for availability', function (Item $item, bool $available) {
         expect($item->available)->toBe($available);
     })->with([
-        fn () => [(new Item)->when(true), true],
-        fn () => [(new Item)->when(false), false],
-        fn () => [(new Item)->when(true)->when(true), true],
-        fn () => [(new Item)->when(false)->when(true), false],
-        fn () => [(new Item)->unless(false), true],
-        fn () => [(new Item)->unless(true), false],
-        fn () => [(new Item)->unless(false)->unless(false), true],
-        fn () => [(new Item)->unless(true)->unless(false), false],
-        fn () => [(new Item)->when(true)->unless(false), true],
-        fn () => [(new Item)->when(true)->unless(true), false],
-        fn () => [(new Item)->when(false)->unless(false), false],
+        fn () => [(new Item)->includeWhen(true), true],
+        fn () => [(new Item)->includeWhen(false), false],
+        fn () => [(new Item)->includeWhen(true)->includeWhen(true), true],
+        fn () => [(new Item)->includeWhen(false)->includeWhen(true), false],
+        fn () => [(new Item)->includeUnless(false), true],
+        fn () => [(new Item)->includeUnless(true), false],
+        fn () => [(new Item)->includeUnless(false)->includeUnless(false), true],
+        fn () => [(new Item)->includeUnless(true)->includeUnless(false), false],
+        fn () => [(new Item)->includeWhen(true)->includeUnless(false), true],
+        fn () => [(new Item)->includeWhen(true)->includeUnless(true), false],
+        fn () => [(new Item)->includeWhen(false)->includeUnless(false), false],
     ]);
 }

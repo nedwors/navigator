@@ -5,10 +5,10 @@ use Nedwors\Navigator\Item;
 
 it('filters out unavailable items by default', function () {
     Nav::define(fn () => [
-        Nav::item('Dashboard')->when(true),
-        Nav::item('Contact Us')->when(false),
-        Nav::item('Home')->unless(false),
-        Nav::item('Settings')->unless(true),
+        Nav::item('Dashboard')->includeWhen(true),
+        Nav::item('Contact Us')->includeWhen(false),
+        Nav::item('Home')->includeUnless(false),
+        Nav::item('Settings')->includeUnless(true),
     ]);
 
     expect(Nav::items())
@@ -22,11 +22,11 @@ it('filters out unavailable items by default', function () {
 it('can filter sub navs', function () {
     Nav::define(fn () => [
         Nav::item('Foo')->subItems([
-            Nav::item('Foo Child')->when(false),
+            Nav::item('Foo Child')->includeWhen(false),
         ]),
         Nav::item('Bar')->subItems([
-            Nav::item('Bar Child')->when(false),
-            Nav::item('Bar Child 2')->when(true),
+            Nav::item('Bar Child')->includeWhen(false),
+            Nav::item('Bar Child 2')->includeWhen(true),
         ]),
     ]);
 
@@ -45,10 +45,10 @@ it('can filter sub navs', function () {
 
 it('can have its filter defined', function () {
     Nav::define(fn () => [
-        Nav::item('Dashboard')->when(true),
-        Nav::item('Contact Us')->when(false),
-        Nav::item('Home')->unless(false),
-        Nav::item('Settings')->unless(true),
+        Nav::item('Dashboard')->includeWhen(true),
+        Nav::item('Contact Us')->includeWhen(false),
+        Nav::item('Home')->includeUnless(false),
+        Nav::item('Settings')->includeUnless(true),
     ]);
 
     Nav::filter(fn (Item $item) => $item->name == 'Dashboard' || $item->name == 'Settings');
