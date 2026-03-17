@@ -11,7 +11,7 @@ use Illuminate\Support\Fluent;
 
 /**
  * @property string $name The display name for the item
- * @property string $url The full url for the item
+ * @property ?string $url The full url for the item
  * @property ?string $heroicon The heroicon name for the item
  * @property ?string $icon The icon name/path for the item
  * @property-read bool             $active               Determine if the current item is active

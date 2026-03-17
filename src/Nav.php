@@ -3,6 +3,7 @@
 namespace Nedwors\Navigator;
 
 use Closure;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 
@@ -14,7 +15,7 @@ class Nav
 
     public const DEFAULT = 'menu.default';
 
-    /** @var array<string, Closure(\Illuminate\Contracts\Auth\Authenticatable|null): iterable<int, Item>> */
+    /** @var array<string, Closure(Authenticatable|null): iterable<int, Item>> */
     protected array $itemsArray = [];
 
     /** @var array<string, Closure(Item): bool> */
@@ -28,7 +29,7 @@ class Nav
         return resolve(Item::class)->called($name);
     }
 
-    /** @param Closure(\Illuminate\Contracts\Auth\Authenticatable|null $user): iterable<int, Item> $items */
+    /** @param Closure(Authenticatable|null $user): iterable<int, Item> $items */
     public function define(Closure $items, string $menu = self::DEFAULT): self
     {
         $this->itemsArray[$menu] = $items;
@@ -47,6 +48,7 @@ class Nav
         /** @phpstan-ignore-next-line */
         return Collection::make(value($this->itemsArray[$menu] ?? [], auth()->user()))
             ->pipe($this->injectActiveCheck($menu))
+            /** @phpstan-ignore-next-line */
             ->pipe($this->applyFilter($menu));
     }
 
