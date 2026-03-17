@@ -14,21 +14,6 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            php: 8.2
-            laravel: 12.*
-            testbench: ^10.0
-            stability: prefer-stable
-          - os: ubuntu-latest
-            php: 8.3
-            laravel: 12.*
-            testbench: ^10.0
-            stability: prefer-stable
-          - os: ubuntu-latest
-            php: 8.4
-            laravel: 12.*
-            testbench: ^10.0
-            stability: prefer-stable
-          - os: ubuntu-latest
             php: 8.3
             laravel: 13.*
             testbench: ^11.0
