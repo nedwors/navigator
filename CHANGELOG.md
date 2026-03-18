@@ -4,6 +4,14 @@ All notable changes to `navigator` will be documented in this file
 
 ## Unreleased
 
+### Changed
+- Changed PHP support to 8.3 and above
+- Changed Laravel support to 13.x
+
+### Removed
+- Removed support for PHP 8.2 and below
+- Removed support for Laravel 12 and below
+
 ## [2.0.0] - 2025-05-28
 ### Changed
 - Changed the `when` and `unless` methods to `includeWhen` and `includeUnless` to respect Laravel's `Conditionable` trait conventions.
