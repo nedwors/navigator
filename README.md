@@ -26,7 +26,10 @@ Nav::define(fn ($user) => [
 
 Nav::toJson()
 ```
-> This is a headless package so you are completely free to style as you see fit.
+> This is a headless package, the styling is left to you!
+
+## Requirements
+Navigator requires PHP 8.3 or higher and Laravel 13 or higher.
 
 ## Installation
 
@@ -122,9 +125,6 @@ $item->heroicon
 ```
 
 ##### Conditionals
-> [!NOTE]
-Version `1.0` and below of Navigator used the methods `when` and `unless`. Now that Laravel includes these methods using the `Conditionable` trait on `Fluent`, and to generally unify with Laravel conventions, these methods have been changed in Navigator `2.0` and above to `includeWhen` and `includeUnless`
-
 You can define conditionals to determine if the given `Item` should be included or not in the menu:
 ```php
 Nav::item('Billing')->includeWhen(auth()->user()->is_subscribed)
